@@ -14,25 +14,86 @@ datasource db {
 }
 
 model User {
-  id                          String                @id @default(uuid())
-  email                       String                @unique
-  name                        String?               @default("")
-  emailVerifiedAt             DateTime?
-  hashed_password             String
-  createdAt                   DateTime              @default(now())
-  updatedAt                   DateTime              @updatedAt
-  sessions                    Session[]
-  role                        Role                  @default(USER)
+  id              String    @id @default(uuid())
+  email           String    @unique
+  name            String?   @default("")
+  emailVerifiedAt DateTime?
+  hashed_password String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  sessions        Session[]
+  role            Role      @default(USER)
 }
 
 model Session {
-  id                          String                @id
-  userId                      String
-  expiresAt                   DateTime
-  user                        User                  @relation(references: [id], fields: [userId], onDelete: Cascade)
+  id        String   @id
+  userId    String
+  expiresAt DateTime
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 enum Role {
   ADMIN
   USER
+}
+
+model Customers {
+  id                String        @id @default(uuid())
+  name              String
+  password          String
+  phone             Int?
+  total_point       Int
+  transaction       Transactions[]
+}
+
+model Stylists {
+  id                String        @id @default(uuid())
+  name              String
+  password          String
+  code              Int
+  transaction       Transactions[]
+}
+
+model Treatments {
+  id                String   @id @default(uuid())
+  name              String
+  price             Int
+  sub_service       String?
+  point             Int
+  transactionDetails transactionDetails[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Points {
+  id                String        @id @default(uuid())
+  name              String?
+  minimum           Int
+  discount          Int
+  transaction       Transactions[]
+}
+
+model Transactions {
+  id                String    @id @default(uuid())
+  customerId        String
+  customer          Customers @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  stylistId         String
+  stylist           Stylists  @relation(fields: [stylistId], references: [id], onDelete: Cascade)
+  pointId           String?
+  point             Points?    @relation(fields: [pointId], references: [id], onDelete: Cascade)
+  totalDiscount     Int?
+  totalPrice        Int
+  totalPoint        Int
+  transactionDetails transactionDetails[]
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
+
+model transactionDetails {
+  treatmentId       String
+  treatment         Treatments    @relation(fields: [treatmentId], references: [id], onDelete: Cascade)
+  transactionId     String
+  transaction       Transactions    @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+  @@id([treatmentId, transactionId])
 }

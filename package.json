@@ -32,7 +32,7 @@
 		"postcss": "^8.4.35",
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.1.2",
-		"prisma": "^5.10.2",
+		"prisma": "^5.11.0",
 		"svelte": "^4.2.7",
 		"svelte-check": "^3.6.0",
 		"tailwindcss": "^3.4.1",
@@ -45,7 +45,7 @@
 	"type": "module",
 	"dependencies": {
 		"@lucia-auth/adapter-prisma": "^4.0.1",
-		"@prisma/client": "5.10.2",
+		"@prisma/client": "5.11.0",
 		"bits-ui": "^0.19.5",
 		"clsx": "^2.1.0",
 		"cmdk-sv": "^0.0.16",
