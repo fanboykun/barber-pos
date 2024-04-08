@@ -58,16 +58,16 @@ model Treatments {
   id                String   @id @default(uuid())
   name              String
   price             Int
-  sub_service       String
+  sub_service       String?
   point             Int
-  transactionDetail transactionDetails[]
+  transactionDetails transactionDetails[]
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 }
 
 model Points {
   id                String        @id @default(uuid())
-  name              String
+  name              String?
   minimum           Int
   discount          Int
   transaction       Transactions[]
@@ -79,20 +79,21 @@ model Transactions {
   customer          Customers @relation(fields: [customerId], references: [id], onDelete: Cascade)
   stylistId         String
   stylist           Stylists  @relation(fields: [stylistId], references: [id], onDelete: Cascade)
-  pointId           String
-  point             Points    @relation(fields: [pointId], references: [id], onDelete: Cascade)
-  totalDiscount     Int
+  pointId           String?
+  point             Points?    @relation(fields: [pointId], references: [id], onDelete: Cascade)
+  totalDiscount     Int?
   totalPrice        Int
   totalPoint        Int
-  transactionDetail transactionDetails[]
+  transactionDetails transactionDetails[]
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 }
 
 model transactionDetails {
-  id                String @id @default(uuid())
   treatmentId       String
   treatment         Treatments    @relation(fields: [treatmentId], references: [id], onDelete: Cascade)
   transactionId     String
   transaction       Transactions    @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+  @@id([treatmentId, transactionId])
 }
