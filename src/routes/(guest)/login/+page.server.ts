@@ -25,7 +25,11 @@ const login: Action = async ({ cookies, request }) => {
     }
 
     await createUserSession(existingUser.id, cookies)
-    redirect(302, "/dashboard");
+    if(existingUser.role === "ADMIN") {
+        return redirect(302, "/dashboard");
+    }
+    
+    return redirect(302, "/stylist");
 }
 
 export const actions: Actions = { login }

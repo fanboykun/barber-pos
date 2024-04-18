@@ -23,6 +23,8 @@ model User {
   updatedAt       DateTime  @updatedAt
   sessions        Session[]
   role            Role      @default(USER)
+  code            String?
+  transaction     Transactions[]
 }
 
 model Session {
@@ -43,14 +45,6 @@ model Customers {
   password          String
   phone             Int?
   total_point       Int
-  transaction       Transactions[]
-}
-
-model Stylists {
-  id                String        @id @default(uuid())
-  name              String
-  password          String
-  code              Int
   transaction       Transactions[]
 }
 
@@ -78,7 +72,7 @@ model Transactions {
   customerId        String
   customer          Customers @relation(fields: [customerId], references: [id], onDelete: Cascade)
   stylistId         String
-  stylist           Stylists  @relation(fields: [stylistId], references: [id], onDelete: Cascade)
+  stylist           User  @relation(fields: [stylistId], references: [id], onDelete: Cascade)
   pointId           String?
   point             Points?    @relation(fields: [pointId], references: [id], onDelete: Cascade)
   totalDiscount     Int?

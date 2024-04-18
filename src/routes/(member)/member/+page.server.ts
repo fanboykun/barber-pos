@@ -1,0 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { redirect } from "@sveltejs/kit";
+import type { PageServerLoad } from "./$types";
+
+export const load: PageServerLoad =  async(event) => {
+    if (!event.locals.customer) {
+        redirect(302, '/sign-in');
+    }
+}

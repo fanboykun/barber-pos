@@ -69,3 +69,32 @@ export const updateUserProfilePasswordValidation = async (data: FormData, exists
 
 }
 
+export const createCustomerValidation = (data: FormData) : finalValidationResult => {
+    const phone = data.get('phone')
+    const name = data.get('name')
+    const password = data.get('password')
+    const confirm_password = data.get('confirm_password')
+
+    const validationInput: validateType[] = [
+        { data: phone, key: 'phone', rules: ['required', 'number', 'min:10'] },
+        { data: name, key: 'name', rules: ['required', 'string'] },
+        { data: password, key: 'password', rules: ['required', 'password'] },
+        { data: confirm_password, key: 'confirm_password', rules: ['required', 'password', `equalTo:${password}`], message: { equalTo: 'password did not match' } },
+    ]
+   
+    return Validator.validate(validationInput)
+}
+
+export const loginCustomerValidation = (data: FormData) : finalValidationResult => {
+    const phone = data.get('phone')
+    const password = data.get('password')
+
+    const validationInput: validateType[] = [
+        { data: phone, key: 'phone', rules: ['required', 'number', 'min:10'] },
+        { data: password, key: 'password', rules: ['required'] },
+    ]
+   
+    return Validator.validate(validationInput)
+}
+
+

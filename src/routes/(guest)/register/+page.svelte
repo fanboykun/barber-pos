@@ -12,14 +12,14 @@
   </script>
   
   <div class="max-w-screen-sm w-full bg-white rounded-xl p-8 flex flex-col items-center justify-center shadow-lg">
-      <h2 class="text-xl py-4 font-semibold">Create an Account</h2>
+      <h2 class="text-xl py-4 font-semibold">Create a Member Account</h2>
       <form class="w-full" method="POST" action="?/register" use:enhance>
           <div class="flex flex-col items-center space-y-4 w-full">
               <div class="grid w-full max-w-sm items-center gap-1.5">
-                  <Label for="email">Email</Label>
-                  <Input type="email" id="email" name="email" placeholder="Email" autocomplete="email"  required />
-                {#if form?.errors?.email?.valid === false}
-                  <InputError messages={form?.errors?.email?.message} />
+                  <Label for="email">Phone</Label>
+                  <Input type="number" id="phone" name="phone" placeholder="Phone Number" autocomplete="phone"  required />
+                {#if form?.errors?.phone?.valid === false}
+                  <InputError messages={form?.errors?.phone?.message} />
                 {/if}
               </div>
               <div class="grid w-full max-w-sm items-center gap-1.5">
@@ -44,8 +44,8 @@
                 {/if}
               </div>
               <div class="flex justify-between items-center w-full max-w-sm">
-                  <a href="/login" class="text-sm text-slate-600">Already registered?</a>
-                  <Button type="submit">Register</Button>
+                  <a href="/sign-in" class="text-sm text-slate-600">Already a member? sign-in as member</a>
+                  <Button type="submit">Register Member</Button>
               </div>
           </div>
       </form>

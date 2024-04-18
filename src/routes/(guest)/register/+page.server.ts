@@ -1,30 +1,29 @@
 import { fail, type Action, type Actions, redirect } from "@sveltejs/kit";
-import { createUser } from "$lib/server/functions/user";
-import { createUserValidation } from "$lib/validation/index.server";
-import { createUserSession } from "$lib/server/utils/session";
+import { createCustomerValidation } from "$lib/validation/index.server";
 import type { PageServerLoad } from "./$types";
+import { createCustomer } from "$lib/server/functions/customer";
+import { createCustomerSession } from "$lib/server/utils/customer-auth";
 
 export const load:PageServerLoad = async (event) => {
-    if (event.locals.session) {
-        redirect(302, "/dashboard");
+    if (event.locals.customer) {
+        redirect(302, "/member");
     }
 }
 
 const register: Action = async ({ cookies, request }) => {
     const data = await request.formData();
-    const [ fails, result ] = createUserValidation(data)
+    const [ fails, result ] = createCustomerValidation(data)
 
     if(fails) return fail(400, { message: 'Validation failed', errors: result })
-    
-    const newUser = await createUser({ 
-            email: data.get('email') as string, 
+    const newCustomer = await createCustomer({ 
+            phone: data.get('phone') as string, 
             name: data.get('name') as string, 
             password: data.get('password') as string,      
         })
 
-    if(!newUser) return fail(500, { message: 'Failed to create user' })
-    await createUserSession(newUser.id, cookies)
-    redirect(302, "/dashboard");
+    if(!newCustomer) return fail(500, { message: 'Failed to create customer' })
+    await createCustomerSession(newCustomer, cookies)
+    redirect(302, "/");
 }
 
 export const actions: Actions = { register }
