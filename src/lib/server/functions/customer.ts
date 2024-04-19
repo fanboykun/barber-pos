@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 import type { Customers } from '@prisma/client';
 
 export type createCustomerDto = {
-    phone: number|string;
+    phone: string;
     name: string;
     password: string;
 } 
@@ -19,7 +19,7 @@ export const createCustomer = async (data: createCustomerDto): Promise<Customers
         const newCustomer = await db.customers.create({
             data: {
                 id: userId, // Add the id property here
-                phone: data.phone as number,
+                phone: String(data.phone) as string,
                 name: data.name,
                 password: hashed_password,
                 total_point: 0
@@ -38,7 +38,7 @@ export const findCustomerByPhone = async(phone: string|number) : Promise<Custome
     try {
         const customer = await db.customers.findFirst({
             where: {
-                phone: phone as number
+                phone: String(phone) as string
             }
         })
         return customer

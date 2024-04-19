@@ -23,7 +23,7 @@ const register: Action = async ({ cookies, request }) => {
 
     if(!newCustomer) return fail(500, { message: 'Failed to create customer' })
     await createCustomerSession(newCustomer, cookies)
-    redirect(302, "/");
+    redirect(302, "/member");
 }
 
 export const actions: Actions = { register }

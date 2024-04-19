@@ -43,8 +43,8 @@ model Customers {
   id                String        @id @default(uuid())
   name              String
   password          String
-  phone             Int?
-  total_point       Int
+  phone             String        @unique
+  total_point       Int           @default(0)
   transaction       Transactions[]
 }
 

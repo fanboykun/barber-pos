@@ -38,14 +38,15 @@ const checkCustomerSession: Handle = async({event, resolve}) => {
 	// check if the request path need the customer session
 	const request_url = event.url.pathname
 	const customerSessionEndpoint = [
-		'sign-in', 'register', 'member'
+		'/', '/sign-in', '/register', '/member', '/sign-out'
 	]
+
 	if(!customerSessionEndpoint.includes(request_url)) {
-		console.log(`${request_url} not get hit`)
+		// console.log(`${request_url} not get hit`)
 		return resolve(event)
 	}
 	
-	console.log(`${request_url} get hit`)
+	// console.log(`${request_url} get hit`)
 	const customerSession = event.cookies.get('customer-session')
 	if(!customerSession) {
 		return resolve(event)
@@ -54,6 +55,7 @@ const checkCustomerSession: Handle = async({event, resolve}) => {
 	const customerData = await validateCustomerSession(customerSession)
 	if(!customerData) {
 		event.locals.customer = null
+		return resolve(event)
 	}
 
 	event.locals.customer = customerData
