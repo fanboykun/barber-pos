@@ -5,7 +5,7 @@ import { getRoleWithUserCount } from "$lib/server/functions/role";
 
 export const load:PageServerLoad = async (event) => {
     if (!event.locals.session) {
-        redirect(302, '/');
+       return redirect(302, '/');
     }
     const rolesWithUserCount = await getRoleWithUserCount();
     const getUser = await getLatestUsers()

@@ -37,8 +37,8 @@
     <div data-collapsed="false" class="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2">
         <nav class="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2" >
             <a
-                href="/profile"
-                class=" { $page.url.pathname === '/profile' ? 'active' : 'inactive'} inline-flex items-center font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 rounded-md px-3 text-xs justify-start">
+                href="/stylist-transaction"
+                class=" { $page.url.pathname === '/stylist-transaction' ? 'active' : 'inactive'} inline-flex items-center font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 rounded-md px-3 text-xs justify-start">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -59,7 +59,7 @@
                         d="M16 3.13a4 4 0 0 1 0 7.75"
                     ></path>
                 </svg>
-                Profile 
+                Your Transaction
                 <!-- <span class="ml-auto">972</span> -->
             </a>
         </nav>

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import TodayTransaction from '../(components)/TodayTransaction.svelte';
+
     export let data
 </script>
 
@@ -110,4 +112,8 @@
 			</div>
 		</div>
 	</div>
+
+	<TodayTransaction />
+
+
 </div>

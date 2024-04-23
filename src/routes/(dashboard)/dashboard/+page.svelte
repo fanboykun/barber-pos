@@ -12,7 +12,6 @@
 		<p class="text-sm text-muted-foreground">Summary of your application. (Example of a dashboard card stats)</p>
 	</div>
 
-	<!-- Example of a dashboard card stats -->
 	<div class="px-4 py-2 ">
 		<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
 			<div class="rounded-xl border bg-card text-card-foreground shadow">
@@ -177,24 +176,6 @@
 				{#if data?.roles}
 					{#each data?.roles as role}
 
-						<!-- <div class="rounded-xl shadow p-6 border bg-white my-2">
-							<div class="space-y-8">
-
-								<div class="flex items-center">
-							
-									<div class="ml-4 space-y-1">
-										<p class="text-sm font-medium leading-none">{role?.name?.toLowerCase()}</p>
-										<p class="text-sm text-muted-foreground">{role.desc}</p>
-									</div>
-									<div class="ml-auto font-medium">
-
-									<Badge size="sm">{role.count} users</Badge>
-
-									</div>
-								</div>
-
-							</div>
-						</div> -->
 
 						<div class="flex items-center p-2 justify-center w-full">
 							<div class="rounded-xl border bg-card text-card-foreground shadow w-full">
