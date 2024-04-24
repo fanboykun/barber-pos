@@ -2,6 +2,15 @@
 	import type { Points } from "@prisma/client";
 	import AddPoint from "./AddPoint.svelte";
 	import type { ActionData } from "../$types";
+	import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
+	import { Button } from "$lib/components/ui/button/index.js";
+	let position = "bottom";
+	import * as AlertDialog from "$lib/components/ui/alert-dialog";
+	import { enhance } from "$app/forms";
+	import InputError from "$lib/components/ui/InputError.svelte";
+
+
+	let isDeleteAlertOpen = false
 	let isOpen = false
 	export let point: Points|null
     export let form: ActionData
@@ -19,17 +28,28 @@
 					</p>
 			</div>
 
-			<div class="flex items-end space-x-1 justify-end rounded-md text-secondary-foreground">
+			<DropdownMenu.Root>
+				<DropdownMenu.Trigger asChild let:builder>
+				  	<Button variant="outline" builders={[builder]}>
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M12 17.25h8.25" />
+						</svg>
+					</Button>
+				</DropdownMenu.Trigger>
+				<DropdownMenu.Content class="w-56">
+				  <DropdownMenu.Label>Action</DropdownMenu.Label>
+				  <DropdownMenu.Separator />
+				  <DropdownMenu.RadioGroup bind:value={position}>
+					<DropdownMenu.Item>
+						<Button type="button" class="w-full" on:click={() => isOpen = !isOpen}>Edit</Button>
+					</DropdownMenu.Item>
+					<DropdownMenu.Item>
+						<Button type="button" class="w-full" variant="destructive" on:click={() => isDeleteAlertOpen = !isDeleteAlertOpen}>Delete</Button>
+					</DropdownMenu.Item>
+				  </DropdownMenu.RadioGroup>
+				</DropdownMenu.Content>
+			  </DropdownMenu.Root>
 
-				<button type="button" on:click={() => isOpen = !isOpen} class="inline-flex w-fit items-center bg-secondary justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 text-secondary-foreground hover:bg-secondary/80 h-9 py-2 px-2 shadow-none">
-
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M12 17.25h8.25" />
-					</svg>	
-
-				</button>
-
-			</div>
 
 		</div>
 
@@ -79,3 +99,27 @@
 </div>
 
 <AddPoint {isOpen} onClose={() => isOpen = false} {point} {form} />
+
+<AlertDialog.Root open={isDeleteAlertOpen}>
+	<AlertDialog.Content>
+		<AlertDialog.Header>
+		<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+		<AlertDialog.Description>
+			This action cannot be undone. This will permanently the point data
+			<div class="w-full flex">
+				<InputError messages={'hi all'} />
+			</div>
+		</AlertDialog.Description>
+		</AlertDialog.Header>
+		<AlertDialog.Footer>
+		<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+		<form action="?/deletePoint" method="POST" use:enhance>
+			<input type="text" name="id" id="id" class="hidden" value={point?.id}>
+			<AlertDialog.Action type="submit" class="bg-destructive">
+			Continue
+			</AlertDialog.Action>
+		</form>
+		</AlertDialog.Footer>
+	</AlertDialog.Content>
+</AlertDialog.Root>
+

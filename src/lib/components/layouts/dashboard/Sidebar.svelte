@@ -6,7 +6,7 @@
 <div class="flex flex-col {isMobile ? 'w-full' : 'w-[250px!important]' }  min-h-[calc(100svh-65px)]" >
 
     <div data-collapsed="false" class="group flex flex-col gap-4 py-2">
-        <nav class="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2" >
+        <nav class="grid gap-2 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2" >
             <a
                 href="/dashboard"
                 class="{$page.url.pathname === '/dashboard' ? 'active' : 'inactive'} inline-flex items-center font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow h-8 rounded-md px-3 text-xs justify-start">
@@ -29,6 +29,15 @@
                 Dashboard
                  <!-- <span class="ml-auto text-background dark:text-white">128</span> -->
             </a>
+
+            <a href="/points" class="{$page.url.pathname === '/points' ? 'active' : 'inactive'} inline-flex items-center font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow h-8 rounded-md px-3 text-xs justify-start">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+                </svg>   
+                Points
+                 <!-- <span class="ml-auto text-background dark:text-white">128</span> -->
+            </a>
+
         </nav>
     </div>
 
@@ -60,20 +69,6 @@
                     ></path>
                 </svg>
                 Profile 
-                <!-- <span class="ml-auto">972</span> -->
-            </a>
-        </nav>
-    </div>
-
-    <div data-collapsed="false" class="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2">
-        <nav class="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2" >
-            <a
-                href="/points"
-                class=" { $page.url.pathname === '/points' ? 'active' : 'inactive'} inline-flex items-center font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 rounded-md px-3 text-xs justify-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-2 size-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
-                    </svg>                  
-                Points
                 <!-- <span class="ml-auto">972</span> -->
             </a>
         </nav>
