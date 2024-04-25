@@ -57,7 +57,7 @@ const prisma = new PrismaClient();
           id: id,
           name: 'Customer',
           password: hashed_password,
-          phone: 81312123456,
+          phone: '081312123456',
           total_point: 0
         }
       })

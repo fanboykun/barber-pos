@@ -4,7 +4,7 @@ import type { PageServerLoad } from "./$types";
 import { validateAddPoint, validateEditPoint } from "./(validation)";
 
 export const load: PageServerLoad = async () => {
-    const points = await getAllPoints()
+    const points = getAllPoints()
     return {
         points
     }

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import * as Dialog from "$lib/components/ui/dialog";
+  import * as Dialog from "$lib/components/ui/dialog";
 	import Label from "$lib/components/ui/label/label.svelte";
 	import Input from "$lib/components/ui/input/input.svelte";
 	import Button from "$lib/components/ui/button/button.svelte";
@@ -12,19 +12,19 @@
   export let onClose: CallableFunction
   export let form: ActionData
   export let formAction: string = '?/createPoint'
-  export let point: Points|null
+  export let point: Points|null = null
 
 </script>
 
 <Dialog.Root bind:open={isOpen} onOpenChange={() => { onClose() }}>
     <Dialog.Content class="sm:max-w-[425px]">
         <Dialog.Header>
-          <Dialog.Title>Edit profile</Dialog.Title>
+          <Dialog.Title>{formAction == '?/createPoint' ? 'Add' : 'Edit'} Point</Dialog.Title>
           <Dialog.Description>
-            Make changes to your profile here. Click save when you're done.
+            Click save when you're done.
           </Dialog.Description>
         </Dialog.Header>
-        <form action="{formAction}" method="post" use:enhance>
+        <form action="{formAction}" method="post" use:enhance={() => {onClose()}}>
             <div class="grid gap-4 py-4">
                 <input type="text" class="hidden" name="id" id="id" value={point?.id}>
               <div class="grid grid-cols-4 items-center gap-4">

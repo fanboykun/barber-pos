@@ -48,7 +48,7 @@
 					</DropdownMenu.Item>
 				  </DropdownMenu.RadioGroup>
 				</DropdownMenu.Content>
-			  </DropdownMenu.Root>
+			</DropdownMenu.Root>
 
 
 		</div>
@@ -98,7 +98,7 @@
 	</div>
 </div>
 
-<AddPoint {isOpen} onClose={() => isOpen = false} {point} {form} />
+<AddPoint {isOpen} onClose={() => isOpen = false} {point} {form} formAction={'?/editPoint'} />
 
 <AlertDialog.Root open={isDeleteAlertOpen}>
 	<AlertDialog.Content>

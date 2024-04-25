@@ -4,14 +4,19 @@
     export let data
     export let form
 </script>
-<div>
-    <PageHeading />
+
+<section>
+    <PageHeading {form} />
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4  p-4">
-        {#if data.points}
-        {#each data.points as point}
-            <PointList {point} {form} />
-        {/each}
-        {/if}
+        {#await data.points}
+            <p>...waiting</p>
+        {:then points}
+            {#if points}
+                {#each points as point}
+                    <PointList {point} {form} />
+                {/each}
+            {/if}
+        {/await}
     </div>
-</div>
+</section>

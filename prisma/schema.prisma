@@ -56,7 +56,7 @@ model Treatments {
   point             Int
   transactionDetails transactionDetails[]
   createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  updatedAt         DateTime @default(now()) @updatedAt
 }
 
 model Points {
@@ -65,6 +65,8 @@ model Points {
   minimum           Int
   discount          Int
   transaction       Transactions[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model Transactions {

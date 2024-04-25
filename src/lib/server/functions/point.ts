@@ -2,7 +2,11 @@ import db from "../utils/prisma"
 
 export const getAllPoints = async() => {
     try {
-        const data = await db.points.findMany()
+        const data = await db.points.findMany({
+            orderBy: {
+                createdAt: 'desc'
+            }
+        })
         return data
     } catch(err) {
         console.log(err)
