@@ -14,7 +14,7 @@ const createPoint: Action = async( { request } ) => {
     const formData = await request.formData()
     const [name, minimum, discount] = [String(formData.get('name')), Number(formData.get('minimum')), Number(formData.get('discount'))]
     const [failed, result] = validateAddPoint(name, minimum, discount)
-    if(failed) return fail(401, { errors: result })
+    if(failed) return fail(401, { errors: result, success: false })
 
     const newPoint = await addPoint(name, minimum, discount)
     return {
@@ -28,10 +28,10 @@ const editPoint: Action = async( { request } ) => {
 
     const [id, name, minimum, discount] = [String(formData.get('id')), String(formData.get('name')), Number(formData.get('minimum')), Number(formData.get('discount'))]
     const [failed, result] = validateEditPoint(id, name, minimum, discount)
-    if(failed) return fail(401, { errors: result })
+    if(failed) return fail(401, { errors: result, success: false })
 
     const existingPoint = getPointById(id)
-    if(!existingPoint) return fail(401, { message: 'Point Not Found!' })
+    if(!existingPoint) return fail(401, { message: 'Point Not Found!', success: false })
         
     const updatedPoint = await updatePoint(id, name, minimum, discount)
     return {
@@ -44,13 +44,13 @@ const deletePoint: Action = async( { request } ) => {
     const formData = await request.formData()
 
     const id = String(formData.get('id'))
-    if(!id) return fail(401, { message: 'Point Not Found!'})
+    if(!id) return fail(401, { message: 'Point Not Found!', success: false })
 
     const existingPoint = getPointById(id)
-    if(!existingPoint) return fail(401, { message: 'Point Not Found!' })
+    if(!existingPoint) return fail(401, { message: 'Point Not Found!', success: false })
 
     const isPointDeleted = await deletePointById(id)
-    if(!isPointDeleted) return fail(401, { message: 'Failed To Delete Point' })
+    if(!isPointDeleted) return fail(401, { message: 'Failed To Delete Point', success: false })
 
     return {
         success: true

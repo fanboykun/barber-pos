@@ -42,7 +42,7 @@ export const deleteTreatmentById = async(id: string) => {
     }
 }
 
-export const addTreatment = async(name: string, price: number, sub_service: string|undefined, point: number) => {
+export const addTreatment = async( name: string, price: number, point: number, sub_service: string|undefined ) => {
     try{
         const newTreatment = await db.treatments.create({
             data: {
@@ -59,7 +59,7 @@ export const addTreatment = async(name: string, price: number, sub_service: stri
     }
 }
 
-export const updateTreatments = async(id: string, name: string, price: number, sub_service: string|undefined, point: number) => {
+export const updateTreatments = async( id: string, name: string, price: number, point: number, sub_service: string|undefined ) => {
     try{
         const updatedTreatment = await db.treatments.update({
             where: {

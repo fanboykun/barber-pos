@@ -1,6 +1,9 @@
 <script lang="ts">
 	import Button from "$lib/components/ui/button/button.svelte";
-
+	import type { ActionData } from "../$types";
+	import AddTreatment from "./AddTreatment.svelte";
+    
+    export let form: ActionData
     let isOpen = false
 </script>
 <div class="flex justify-between px-8 pt-4 pb-2 bg-gray-50">
@@ -12,4 +15,7 @@
         Add New
     </Button>
 </div>
+
+<AddTreatment {isOpen} {form} onClose={() => {isOpen = false}} />
+
 

@@ -6,6 +6,7 @@
 
 	let className: $$Props["class"] = undefined;
 	export { className as class };
+	export let isRequired = false
 </script>
 
 <LabelPrimitive.Root
@@ -16,4 +17,7 @@
 	{...$$restProps}
 >
 	<slot />
+	{#if isRequired}
+	<span class="text-red-500 text-xs">*</span>
+	{/if}
 </LabelPrimitive.Root>

@@ -1,30 +1,36 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { toast } from 'svelte-sonner';
     import PageHeading from './(components)/PageHeading.svelte'
-	import type { Treatments } from '@prisma/client';
 	import TreatmentList from './(components)/TreatmentList.svelte';
     export let data
     export let form
 
-    let treatments: Treatments[]|null = null
-
-    onMount( async () => {
-        treatments = await data.treatments
-    })
+    $: {
+        if(form?.success) {
+            let isSuccess = form?.success == true
+            toast(isSuccess ? 'Success' : 'Failed', {
+                description: isSuccess ? "The Action Executed Successfully" : "The Action Failed to Execute",
+            })
+        }
+    }
 </script>
 
 <section>
-    <PageHeading />
+    <PageHeading {form} />
 
     <div class="grid gap-4 p-4 sm:grid-cols-2">
     
-        {#if treatments}
-            {#each treatments as treatment}
-                <TreatmentList {treatment}/>
-            {/each}
-        {:else}
+        {#await data.treatments}
             <p>... waiting</p>
-        {/if}
+        {:then treatments}
+            {#if treatments}
+                {#each treatments as treatment}
+                    <TreatmentList {treatment} {form}/>
+                {/each}
+            {/if}
+        {:catch}
+            <p>Error</p>
+        {/await}
         
     </div>
 </section>
