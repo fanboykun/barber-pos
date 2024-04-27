@@ -24,7 +24,7 @@
               Click save when you're done.
             </Dialog.Description>
           </Dialog.Header>
-          <form action="{formAction}" method="post" use:enhance={() => {onClose()}}>
+          <form action="{formAction}" method="post" use:enhance>
               <div class="grid gap-4 py-4">
                 {#if formAction == '?/editMember'}
                   <input type="text" class="hidden" name="id" id="id" value={member?.id}>

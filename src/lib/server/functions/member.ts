@@ -49,14 +49,14 @@ export const deleteMemberById = async(id: string) => {
 export const addMember = async(phone: number, name: string, password: string) => {
     try{
         const hashed_password = await new Argon2id().hash(password);
-        const newPoint = await db.customers.create({
+        const newMember = await db.customers.create({
             data: {
                 phone: phone.toString(),
                 name: name,
                 password: hashed_password
             }
         })
-        return newPoint
+        return newMember
     } catch(err) {
         console.log(err)
         return null
