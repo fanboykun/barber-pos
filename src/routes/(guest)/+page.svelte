@@ -6,7 +6,7 @@
 	import Team from '$lib/components/pages/home/Team.svelte';
     export let data
 </script>
-<div class="flex flex-col justify-center items-center relative bg-gray-100 overflow-x-hidden">
+<div class="flex flex-col w-full justify-center items-center relative bg-gray-100 overflow-x-hidden">
 
     <Navigation user={data.user} />
     <Hero />

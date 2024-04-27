@@ -61,6 +61,27 @@ const prisma = new PrismaClient();
           total_point: 0
         }
       })
+
+      // Add 2 more customers
+      await prisma.customers.create({
+        data: {
+          id: uuid(),
+          name: 'Customer 2',
+          password: hashed_password,
+          phone: '081312123457',
+          total_point: 0
+        }
+      })
+
+      await prisma.customers.create({
+        data: {
+          id: uuid(),
+          name: 'Customer 3',
+          password: hashed_password,
+          phone: '081312123458',
+          total_point: 0
+        }
+      })
     }
 
     const insertTreatments = async() => {
