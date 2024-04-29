@@ -30,7 +30,7 @@ const editTreatment: Action = async ( { request } ) => {
     const [failed, result] = validateUpdateTreatment(id, name, price, point, sub_service)
     if(failed) return fail(401, { errors: result, success: false })
 
-    const existingTreatment = getTreatmentById(id)
+    const existingTreatment = await getTreatmentById(id)
     if(!existingTreatment) return fail(401, { message: 'Treatment Not Found!', success: false })
 
     const updatedPoint = await updateTreatments(id, name, price, point, sub_service)
@@ -46,7 +46,7 @@ const deleteTreatment: Action = async ( { request } ) => {
     const id = String(formData.get('id'))
     if(!id) return fail(401, { message: 'Treatment Not Found!', success: false })
 
-    const existingTreatment = getTreatmentById(id)
+    const existingTreatment = await getTreatmentById(id)
     if(!existingTreatment) return fail(401, { message: 'Treatment Not Found!', success: false })
 
     const isTreatmentDeleted = await deleteTreatmentById(id)

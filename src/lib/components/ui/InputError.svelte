@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { validated } from "ts-input-validator";
-
     export let messages: validated|string
     
     const messageToArray = (message: validated) => {
@@ -11,7 +10,7 @@
         return m;
     }
 </script>
-<p class="text-sm text-red-500">
+<p class="text-sm text-red-500 text-center">
     {#if typeof messages === "string"}
         <span class="block">{messages}</span>
     {:else}
