@@ -2,11 +2,11 @@
 	import { Label as LabelPrimitive } from "bits-ui";
 	import { cn } from "$lib/components/shadcn-utils.js";
 
-	type $$Props = LabelPrimitive.Props;
+	type $$Props = LabelPrimitive.Props & { isRequired?: boolean };
 
 	let className: $$Props["class"] = undefined;
-	export { className as class };
-	export let isRequired = false
+	let isRequired: $$Props["isRequired"] = false
+	export { className as class, isRequired };
 </script>
 
 <LabelPrimitive.Root

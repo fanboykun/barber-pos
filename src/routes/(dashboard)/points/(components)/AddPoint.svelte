@@ -14,9 +14,24 @@
   export let formAction: string = '?/createPoint'
   export let point: Points|null = null
 
+  const closeFormOnSuccess = () => {
+      if(form?.success == true) {
+        isOpen = false
+      } 
+    }
+
+  const closeDialog = () => {
+    delete form?.errors; 
+    return onClose()
+  }
+  
+  $: if(form?.success) {
+    closeFormOnSuccess()
+  }
+
 </script>
 
-<Dialog.Root bind:open={isOpen} onOpenChange={() => { onClose() }}>
+<Dialog.Root bind:open={isOpen} onOpenChange={closeDialog}>
     <Dialog.Content class="sm:max-w-[425px]">
         <Dialog.Header>
           <Dialog.Title>{formAction == '?/createPoint' ? 'Add' : 'Edit'} Point</Dialog.Title>
@@ -24,7 +39,7 @@
             Click save when you're done.
           </Dialog.Description>
         </Dialog.Header>
-        <form action="{formAction}" method="post" use:enhance={() => {onClose()}}>
+        <form action="{formAction}" method="post" use:enhance>
             <div class="grid gap-4 py-4">
                 <input type="text" class="hidden" name="id" id="id" value={point?.id}>
               <div class="grid grid-cols-4 items-center gap-4">

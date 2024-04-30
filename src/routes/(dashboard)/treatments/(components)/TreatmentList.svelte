@@ -8,11 +8,18 @@
 	import InputError from "$lib/components/ui/InputError.svelte";
 	import { enhance } from "$app/forms";
 
-
     export let treatment: Treatments
     let isOpen = false
     let isAlertDeleteOpen = false
     export let form: ActionData
+    
+    const closeFormDialog = () => {
+        isOpen = false; 
+    }
+
+    // $: if(isOpen) {
+    //     delete form?.errors
+    // }
 </script>
 
 <!-- Card -->
@@ -83,7 +90,7 @@
 </div>
 <!-- End Card -->
 
-<AddTreatment {isOpen} {treatment} {form} onClose={() => {isOpen = false}} formAction={"?/editTreatment"} />
+<AddTreatment {isOpen} {treatment} {form} onClose={closeFormDialog} formAction={"?/editTreatment"} />
 
 <AlertDialog.Root open={isAlertDeleteOpen}>
     <AlertDialog.Content>

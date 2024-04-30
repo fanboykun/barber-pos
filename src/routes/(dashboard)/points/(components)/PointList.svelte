@@ -106,9 +106,6 @@
 		<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
 		<AlertDialog.Description>
 			This action cannot be undone. This will permanently the point data
-			<div class="w-full flex">
-				<InputError messages={'hi all'} />
-			</div>
 		</AlertDialog.Description>
 		</AlertDialog.Header>
 		<AlertDialog.Footer>
@@ -120,6 +117,13 @@
 			</AlertDialog.Action>
 		</form>
 		</AlertDialog.Footer>
+		<AlertDialog.Footer>
+            {#if form?.errors?.message}
+                <div class="w-full flex items-center justify-center">
+                    <InputError messages={form?.errors?.message} />
+                </div>
+            {/if}
+        </AlertDialog.Footer>
 	</AlertDialog.Content>
 </AlertDialog.Root>
 
