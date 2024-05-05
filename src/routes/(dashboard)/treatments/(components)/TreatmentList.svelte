@@ -1,10 +1,10 @@
 <script lang="ts">
+	import type { Treatments } from "@prisma/client";
+	import type { ActionData } from "../$types";
+    
 	import Button from "$lib/components/ui/button/button.svelte";
 	import * as AlertDialog from "$lib/components/ui/alert-dialog";
 	import AddTreatment from "./AddTreatment.svelte";
-
-	import type { Treatments } from "@prisma/client";
-	import type { ActionData } from "../$types";
 	import InputError from "$lib/components/ui/InputError.svelte";
 	import { enhance } from "$app/forms";
 	import Input from "$lib/components/ui/input/input.svelte";

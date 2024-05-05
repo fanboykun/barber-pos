@@ -1,19 +1,21 @@
 <script lang="ts">
 	import type { Points } from "@prisma/client";
-	import AddPoint from "./AddPoint.svelte";
 	import type { ActionData } from "../$types";
+
+	import AddPoint from "./AddPoint.svelte";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
 	import { Button } from "$lib/components/ui/button/index.js";
-	let position = "bottom";
 	import * as AlertDialog from "$lib/components/ui/alert-dialog";
 	import { enhance } from "$app/forms";
 	import InputError from "$lib/components/ui/InputError.svelte";
+	import Input from "$lib/components/ui/input/input.svelte";
 
 	export let points: Points[]
     export let form: ActionData
 
 	let isDeleteAlertOpen = false
 	let isOpen = false
+	let search = ''
 
 	let selectedPoint: Points|null = null
 
@@ -24,10 +26,27 @@
 		else if(dialog == "delete") { isDeleteAlertOpen = state }
 	}
 
+	$: pointList = points
+    $: {
+        if(search != '') { searchTreatment(search) }
+        else { pointList = points }
+    }
+
+    /** client side data searching based on treatment name */
+    function searchTreatment(s: string) {
+        const f = points.filter((v) => {
+            return v.name?.toLowerCase().includes(s.toLowerCase())
+        })
+        pointList = f
+    }
+
 </script>
+<div class="flex gap-x-2 w-full px-8 py-2 rounded-md bg-gray-50">
+    <Input placeholder="search point by name" type="search" bind:value={search} />
+ </div>
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4  p-4">
 
-	{#each points as point}
+	{#each pointList as point}
 		<div class="flex items-center justify-center [&amp;>div]:w-full">
 			<div class="rounded-xl border bg-card text-card-foreground shadow">
 
@@ -50,14 +69,12 @@
 						<DropdownMenu.Content class="w-56">
 						<DropdownMenu.Label>Action</DropdownMenu.Label>
 						<DropdownMenu.Separator />
-						<DropdownMenu.RadioGroup bind:value={position}>
 							<DropdownMenu.Item>
 								<Button type="button" class="w-full" on:click={() => changeDialogState("form", true, point)}>Edit</Button>
 							</DropdownMenu.Item>
 							<DropdownMenu.Item>
 								<Button type="button" class="w-full" variant="destructive" on:click={() => changeDialogState("delete", true, point)}>Delete</Button>
 							</DropdownMenu.Item>
-						</DropdownMenu.RadioGroup>
 						</DropdownMenu.Content>
 					</DropdownMenu.Root>
 				</div>
