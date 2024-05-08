@@ -2,6 +2,7 @@
 	import { toast } from 'svelte-sonner';
     import PageHeading from './(components)/PageHeading.svelte'
     import PointList from './(components)/PointList.svelte'
+	import LoadingSpinner from '$lib/components/ui/LoadingSpinner.svelte';
     export let data
     export let form
     
@@ -18,15 +19,13 @@
 <section>
     <PageHeading {form} />
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4  p-4">
         {#await data.points}
-            <p>...waiting</p>
+            <LoadingSpinner />
         {:then points}
             {#if points}
-                {#each points as point}
-                    <PointList {point} {form} />
-                {/each}
+                <PointList {points} {form} />
             {/if}
+        {:catch}
+            <p>Error</p>
         {/await}
-    </div>
 </section>
