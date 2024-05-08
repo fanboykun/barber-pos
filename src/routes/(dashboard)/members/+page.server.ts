@@ -2,7 +2,8 @@ import { getAllMembers } from "$lib/server/functions/member"
 import { fail, type Action, type Actions } from "@sveltejs/kit"
 import type { PageServerLoad } from "./$types"
 import { validateAddMember } from "./(validation)"
-import { createCustomer } from "$lib/server/functions/customer"
+import { createCustomer, deleteCustomer } from "$lib/server/functions/customer"
+import { request } from "http"
 
 
 export const load: PageServerLoad = async () => {
@@ -33,5 +34,20 @@ export const actions: Actions = {
                 data: newMember
             }
             
+    },
+
+    deleteMember: async ( { params } ) => {
+
+        const id = params.id
+
+        // console.log(id)
+        
+        if (!id) return fail(400, { error: "Invalid member ID", success: false })
+        
+        const deletedMember = await deleteCustomer(id)
+        return {
+            success: true,
+            data: deletedMember
         }
     }
+}

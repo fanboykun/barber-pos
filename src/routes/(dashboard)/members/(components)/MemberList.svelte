@@ -17,7 +17,6 @@
 
 </script>
 
-    
         <Table.Row>
           <Table.Cell class="font-medium">1</Table.Cell>
           <Table.Cell> {member?.name} </Table.Cell>
@@ -39,14 +38,19 @@
                       <DropdownMenu.Item>
                           <Button type="button" class="w-full">Edit</Button>
                       </DropdownMenu.Item>
-                      <DropdownMenu.Item>
-                          <Button type="button" class="w-full" variant="destructive" >Delete</Button>
-                      </DropdownMenu.Item>
+
+                      <form action="?/deleteMember" method="POST" use:enhance>
+                          <DropdownMenu.Item>
+                              <input type="text" name="id" id="id" class="hidden" value={member?.id}>
+                              <Button type="button" class="w-full" variant="destructive">Delete</Button>
+                            </DropdownMenu.Item>
+                      </form>
                     </DropdownMenu.RadioGroup>
                   </DropdownMenu.Content>
               </DropdownMenu.Root>
           </Table.Cell>
         </Table.Row>
+
 
         <!-- <AddMember {isOpen} {member} {form} onClose={() => {isOpen = false}} formAction={"?/editMember"} /> -->
 

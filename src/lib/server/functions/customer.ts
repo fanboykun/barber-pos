@@ -48,3 +48,18 @@ export const findCustomerByPhone = async(phone: string|number) : Promise<Custome
     }
 }
 
+
+export const deleteCustomer = async (id: string): Promise<Customers | null> => {
+
+    try {
+        const customer = await db.customers.delete({
+            where: {
+                id: id
+            }
+        })
+        return customer
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}

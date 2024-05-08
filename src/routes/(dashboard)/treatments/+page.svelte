@@ -25,7 +25,7 @@
         {:then treatments}
             {#if treatments}
                 {#each treatments as treatment}
-                    <TreatmentList {treatment} {form}/>
+                    <TreatmentList {treatment} {form} />
                 {/each}
             {/if}
         {:catch}
