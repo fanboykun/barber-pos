@@ -41,14 +41,14 @@
     }
 
 </script>
-<div class="flex gap-x-2 w-full px-8 py-2 rounded-md bg-gray-50">
+<div class="flex gap-x-2 w-full px-4 sm:px-8 py-2 rounded-md bg-gray-50">
     <Input placeholder="search point by name" type="search" bind:value={search} />
  </div>
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-4  p-4">
+<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 p-4 w-full">
 
 	{#each pointList as point}
-		<div class="flex items-center justify-center [&amp;>div]:w-full">
-			<div class="rounded-xl border bg-card text-card-foreground shadow">
+		<div class="flex items-center justify-center w-full">
+			<div class="rounded-xl border bg-card text-card-foreground shadow w-full">
 
 				<div class="flex-col p-6 grid grid-cols-[1fr_110px] items-start justify-between gap-4 space-y-0">
 					

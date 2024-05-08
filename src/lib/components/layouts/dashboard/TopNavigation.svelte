@@ -5,10 +5,11 @@
 	import Button from "$lib/components/ui/button/button.svelte";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import { browser } from "$app/environment";
-	import { capitalizeFirstLetter, createGradientAvatar } from '$lib/client/utils'
+	import { capitalizeFirstLetter, createGradientAvatar, getFistCharFromName } from '$lib/client/utils'
     import * as Sheet from "$lib/components/ui/sheet";
 	import Sidebar from "./Sidebar.svelte";
-    
+    import * as Avatar from "$lib/components/ui/avatar/index.js";
+
     export let user: User|null
     
     let sidebarOpen = false
@@ -39,26 +40,18 @@
             <span class="text-sm font-semibold">{user.name}</span>
                 <DropdownMenu.Root>
                     <DropdownMenu.Trigger>
-                        <button type="button" class="inline-flex items-center justify-center text-sm font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground px-4 py-2 relative h-8 w-8 rounded-full">
-                        <div class="relative flex shrink-0 overflow-hidden rounded-full h-8 w-8">
+                        <Avatar.Root>
                             {#if browser}
-                            <img
-                                src={createGradientAvatar()}
-                                data-melt-avatar-image=""
-                                data-bits-avatar-image=""
-                                alt="@shadcn"
-                                class="aspect-square h-full w-full"
-                                style="display: block;"
-                            />
+                            <Avatar.Image src={createGradientAvatar()} alt="user avatar" />
                             {/if}
-                            <span
-                                data-melt-avatar-fallback=""
-                                data-avatar-fallback=""
-                                class="flex h-full w-full items-center justify-center rounded-full bg-muted"
-                                style="display: none;">SC
-                            </span>
-                        </div>
-                    </button>
+                            <Avatar.Fallback>{getFistCharFromName(user.name)}</Avatar.Fallback>
+                        </Avatar.Root>
+                        <span
+                            data-melt-avatar-fallback=""
+                            data-avatar-fallback=""
+                            class="flex h-full w-full items-center justify-center rounded-full bg-muted"
+                            style="display: none;">SC
+                        </span>
                     </DropdownMenu.Trigger>
                     <DropdownMenu.Content>
                     <DropdownMenu.Group>
@@ -84,7 +77,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                 </svg>                  
             </Sheet.Trigger>
-            <Sheet.Content  side="left" class="w-2/3 sm:w-1/3">
+            <Sheet.Content  side="left" class="w-full sm:w-2/3 py-6 px-1">
                 <Sidebar isMobile={true} />
             </Sheet.Content>
         </Sheet.Root>

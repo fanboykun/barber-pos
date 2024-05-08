@@ -21,6 +21,20 @@ export const createGradientAvatar = () => {
     return canvas.toDataURL();
 }
 
+export const getFistCharFromName = (name: string|undefined) => {
+    const defaultChar = 'O'
+    if(name == undefined) return defaultChar
+    try {
+        const splitted = name.split(' ')
+        const first = splitted.at(0)?.charAt(0).toUpperCase()
+        const second = splitted.at(1)?.charAt(0).toUpperCase()
+        if(splitted.length >= 2) return `${first}${second}`
+        return first
+    } catch(err) {
+        return defaultChar
+    }
+}
+
 export const capitalizeFirstLetter = (string: string) => {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 }

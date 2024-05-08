@@ -113,7 +113,7 @@
 		</div>
 	</div>
 
-	<TodayTransaction />
+	<!-- <TodayTransaction /> -->
 
 
 </div>
