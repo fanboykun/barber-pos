@@ -34,6 +34,20 @@ export const createCustomer = async (data: createCustomerDto): Promise<Customers
 
 }
 
+export const getCustomerById = async(id: string) => {
+    try {
+        const member = await db.customers.findUnique({
+            where: {
+                id: id
+            }
+        })
+        return member
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}
+
 export const findCustomerByPhone = async(phone: string|number) : Promise<Customers | null> => {
     try {
         const customer = await db.customers.findFirst({
@@ -42,6 +56,25 @@ export const findCustomerByPhone = async(phone: string|number) : Promise<Custome
             }
         })
         return customer
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}
+
+export const updateMembers = async( id: string, name: string, phone: string, password: string ) => {
+    try{
+        const updatedCustomer = await db.customers.update({
+            where: {
+                id: id
+            },
+            data: {
+                name: name,
+                phone: phone,
+                password: password
+            }
+        })
+        return updatedCustomer
     } catch(err) {
         console.log(err)
         return null

@@ -3,6 +3,8 @@
 	import MemberList from './(components)/MemberList.svelte';
     import PageHeading from './(components)/PageHeading.svelte'
     import * as Table from "$lib/components/ui/table"
+	import LoadingSpinner from '$lib/components/ui/LoadingSpinner.svelte';
+	import Input from '$lib/components/ui/input/input.svelte';
 
     export let data
     export let form
@@ -15,33 +17,23 @@
             })
         }
     }
+
+    
 </script>
 
 <section>
   <PageHeading {form} />
 
-  <div class="grid gap-4  p-4">
-      {#await data.members}
-          <p>...waiting</p>
-      {:then members}
-          {#if members}
-          <Table.Root>
-            <Table.Header>
-              <Table.Row>
-                <Table.Head class="w-[50px]">No.</Table.Head>
-                <Table.Head class="w-[100px]">Name</Table.Head>
-                <Table.Head>Phone</Table.Head>
-                <Table.Head class="w-[120px]">Total Point</Table.Head>
-                <Table.Head>Actions</Table.Head>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-                {#each members as member}
-                    <MemberList {member} {form}/>
-                {/each}
-            </Table.Body>
-        </Table.Root>
-          {/if}
-      {/await}
-  </div>
+  {#await data.members}
+    <LoadingSpinner />
+    {:then members}
+        {#if members}
+        <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 p-4"> -->
+            <MemberList {members} {form}/>
+        <!-- </div> -->
+        {/if}
+    {:catch}
+    <p>Error</p>
+  {/await}
+
 </section>

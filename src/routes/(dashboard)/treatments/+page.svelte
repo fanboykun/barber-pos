@@ -2,6 +2,7 @@
 	import { toast } from 'svelte-sonner';
     import PageHeading from './(components)/PageHeading.svelte'
 	import TreatmentList from './(components)/TreatmentList.svelte';
+	import LoadingSpinner from '$lib/components/ui/LoadingSpinner.svelte';
     export let data
     export let form
 
@@ -18,19 +19,15 @@
 <section>
     <PageHeading {form} />
 
-    <div class="grid gap-4 p-4 sm:grid-cols-2">
     
-        {#await data.treatments}
-            <p>... waiting</p>
-        {:then treatments}
-            {#if treatments}
-                {#each treatments as treatment}
-                    <TreatmentList {treatment} {form} />
-                {/each}
-            {/if}
-        {:catch}
-            <p>Error</p>
-        {/await}
+    {#await data.treatments}
+       <LoadingSpinner />
+    {:then treatments}
+        {#if treatments}
+            <TreatmentList {treatments} {form}/>
+        {/if}
+    {:catch}
+        <p>Error</p>
+    {/await}
         
-    </div>
 </section>

@@ -9,12 +9,12 @@ export const validateAddMember = ( name: string|null, phone: string|null, passwo
     return Validator.validate(validationInput)
 }
 
-export const validateUpdateMember = ( id:string, phone: number|null, name: string|null, password: string|null): finalValidationResult => {
+export const validateUpdateMember = ( id:string, name: string|null, phone: string|null, password: string|null): finalValidationResult => {
     const validationInput: validateType[] = [
         { data: id, key: 'id', rules: ['required', 'string', 'uuid'] },
-        { data: phone, key: 'phone', rules: ['required', 'number'] },
         { data: name, key: 'name', rules: ['required', 'string'] },
-        { data: password, key: 'password', rules: ['required', 'password', 'min:5'] },
+        { data: phone, key: 'phone', rules: ['required', 'string'] },
+        { data: password, key: 'password', rules: ['required', 'string', 'min:0'] },
     ]
     return Validator.validate(validationInput)
 }
