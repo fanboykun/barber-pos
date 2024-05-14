@@ -22,7 +22,7 @@ const createStylist: Action = async ( { request } ) => {
     if(failed) return fail(401, { errors: result, success: false })
     const hashed_password = await new Argon2id().hash(password);
 
-    const newStylist = await addStylist(name, email, hashed_password)
+    const newStylist = await addStylist(name.trim(), email.trim(), hashed_password)
     return {
         success: true,
         data: newStylist
@@ -35,10 +35,10 @@ const editStylist: Action = async ( { request } ) => {
     const [failed, result] = validateUpdateStylist(id, name, email)
     if(failed) return fail(401, { errors: result, success: false })
 
-    const existingTreatment = await getStylistById(id)
+    const existingTreatment = await getStylistById(id.trim())
     if(!existingTreatment) return fail(401, { message: 'Treatment Not Found!', success: false })
 
-    const updatedStylist = await updateStylists(id, name, email)
+    const updatedStylist = await updateStylists(id.trim(), name.trim(), email.trim())
     return {
         success: true,
         data: updatedStylist
@@ -49,9 +49,9 @@ const deleteStylist: Action = async ( { request } ) => {
     const formData = await request.formData()
 
     const id = String(formData.get('id'))
-    if(!id) return fail(401, { message: 'Stylist Not Found!', success: false })
+    if(id === 'undefined' || id === 'null' || id == null) return fail(401, { message: 'Stylist Not Found!', success: false })
 
-    const existingStylist = await getStylistById(id)
+    const existingStylist = await getStylistById(id.trim())
     if(!existingStylist) return fail(401, { message: 'Stylist Not Found!', success: false })
 
     const isStylistDeleted = await deleteStylistById(id)
@@ -71,7 +71,7 @@ const updatePassword: Action = async ( { request } ) => {
     if(failed) return fail(401, { errors: result, success: false })
     const hashed_password = await new Argon2id().hash(password);
 
-    const updatedStylist = await updateStylistsPassword(id, hashed_password)
+    const updatedStylist = await updateStylistsPassword(id.trim(), hashed_password)
     if(!updatedStylist) return fail(401, { message: 'Failed To Update Stylist Password', success: false })
 
     return {

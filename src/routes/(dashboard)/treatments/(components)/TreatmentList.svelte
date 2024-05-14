@@ -46,9 +46,9 @@
 <div class="grid gap-4 px-4 sm:grid-cols-2">
     {#each treatmentList as treatment}
         <!-- Card List -->
-        <div class="relative">
+        <div class="relative mt-4">
         
-            <div class="bg-white p-4 mt-4 transition duration-300 rounded-lg shadow border-t hover:bg-gray-50 hover:shadow-md ">
+            <div class="bg-white h-full p-4 mt-4 transition duration-300 rounded-lg shadow border-t hover:bg-gray-50 hover:shadow-md ">
                 <div class="flex">
                 <div class="mt-1.5 flex justify-center flex-shrink-0 rounded-s-xl">
                     <svg class="size-5 text-gray-800" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">

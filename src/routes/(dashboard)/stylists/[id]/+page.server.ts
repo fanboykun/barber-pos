@@ -7,7 +7,7 @@ export const load: PageServerLoad = async ( event ) => {
         return redirect(302, '/');
      }
 
-    const stylist = getStylistWithTransactionById(event.params.id)
+    const stylist = getStylistWithTransactionById(event.params.id.trim())
     return {
         stylist
     }
