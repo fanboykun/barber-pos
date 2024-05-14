@@ -8,6 +8,7 @@ CREATE TABLE `User` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `role` ENUM('ADMIN', 'USER') NOT NULL DEFAULT 'USER',
+    `code` VARCHAR(191) NULL,
 
     UNIQUE INDEX `User_email_key`(`email`),
     PRIMARY KEY (`id`)
@@ -27,19 +28,10 @@ CREATE TABLE `Customers` (
     `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
-    `phone` INTEGER NULL,
-    `total_point` INTEGER NOT NULL,
+    `phone` VARCHAR(191) NOT NULL,
+    `total_point` INTEGER NOT NULL DEFAULT 0,
 
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `Stylists` (
-    `id` VARCHAR(191) NOT NULL,
-    `name` VARCHAR(191) NOT NULL,
-    `password` VARCHAR(191) NOT NULL,
-    `code` INTEGER NOT NULL,
-
+    UNIQUE INDEX `Customers_phone_key`(`phone`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -51,7 +43,7 @@ CREATE TABLE `Treatments` (
     `sub_service` VARCHAR(191) NULL,
     `point` INTEGER NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME(3) NOT NULL,
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -62,6 +54,8 @@ CREATE TABLE `Points` (
     `name` VARCHAR(191) NULL,
     `minimum` INTEGER NOT NULL,
     `discount` INTEGER NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -96,7 +90,7 @@ ALTER TABLE `Session` ADD CONSTRAINT `Session_userId_fkey` FOREIGN KEY (`userId`
 ALTER TABLE `Transactions` ADD CONSTRAINT `Transactions_customerId_fkey` FOREIGN KEY (`customerId`) REFERENCES `Customers`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Transactions` ADD CONSTRAINT `Transactions_stylistId_fkey` FOREIGN KEY (`stylistId`) REFERENCES `Stylists`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Transactions` ADD CONSTRAINT `Transactions_stylistId_fkey` FOREIGN KEY (`stylistId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Transactions` ADD CONSTRAINT `Transactions_pointId_fkey` FOREIGN KEY (`pointId`) REFERENCES `Points`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
