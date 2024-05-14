@@ -48,7 +48,7 @@
         <!-- Card List -->
         <div class="relative">
         
-            <div class="bg-gray-50 p-4 mt-4 transition duration-300 rounded-lg hover:bg-gray-100 border-2 border-gray-200">
+            <div class="bg-white p-4 mt-4 transition duration-300 rounded-lg shadow border-t hover:bg-gray-50 hover:shadow-md ">
                 <div class="flex">
                 <div class="mt-1.5 flex justify-center flex-shrink-0 rounded-s-xl">
                     <svg class="size-5 text-gray-800" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">

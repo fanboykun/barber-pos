@@ -1,9 +1,12 @@
 import { addTreatment, deleteTreatmentById, getAllTreatments, getTreatmentById, updateTreatments } from "$lib/server/functions/treatment"
-import { fail, type Action, type Actions } from "@sveltejs/kit"
+import { fail, redirect, type Action, type Actions } from "@sveltejs/kit"
 import type { PageServerLoad } from "./$types"
 import { validateAddTreatment, validateUpdateTreatment } from "./(validation)"
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async (event) => {
+    if (!event.locals.session) {
+        return redirect(302, '/');
+     }
     const treatments = getAllTreatments()
     return {
         treatments

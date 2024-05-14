@@ -1,9 +1,13 @@
 import { addPoint, deletePointById, getAllPoints, getPointById, updatePoint } from "$lib/server/functions/point";
-import { fail, type Action, type Actions } from "@sveltejs/kit";
+import { fail, redirect, type Action, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { validateAddPoint, validateEditPoint } from "./(validation)";
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async (event) => {
+    if (!event.locals.session) {
+        return redirect(302, '/');
+     }
+
     const points = getAllPoints()
     return {
         points
