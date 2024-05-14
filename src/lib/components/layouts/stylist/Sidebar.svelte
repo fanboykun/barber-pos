@@ -9,7 +9,7 @@
         <nav class="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2" >
             <a
                 href="/stylist"
-                class="{$page.url.pathname === '/stylist' ? 'active' : 'inactive'} inline-flex items-center font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow h-8 rounded-md px-3 text-xs justify-start">
+                class="{$page.url.pathname === '/stylist' ? 'active' : 'inactive'} inline-flex items-center font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow-sm h-8 rounded-md px-3 text-xs justify-start">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
