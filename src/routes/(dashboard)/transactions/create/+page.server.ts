@@ -1,4 +1,3 @@
-import { getAllMembers } from '$lib/server/functions/member.js'
 import { getAllPoints } from '$lib/server/functions/point.js'
 import { getAllStylists } from '$lib/server/functions/stylist.js'
 import { getAllTreatments } from '$lib/server/functions/treatment.js'
@@ -13,14 +12,14 @@ export const load = async (event) => {
     // const stylists = getAllStylists()
     // const members = getAllMembers()
     const creation = async () => {
-        const [treatments, points, stylists, members] = await Promise.all([
+        const [treatments, points, stylists] = await Promise.all([
             getAllTreatments(),
             getAllPoints(),
             getAllStylists(),
-            getAllMembers()
+            // getAllMembers()
         ]);
         
-        return { treatments, points, stylists, members };
+        return { treatments, points, stylists };
     }
     return {
         all: creation()
