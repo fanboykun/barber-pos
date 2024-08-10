@@ -71,8 +71,8 @@ model Points {
 
 model Transactions {
   id                String    @id @default(uuid())
-  customerId        String
-  customer          Customers @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId        String?
+  customer          Customers? @relation(fields: [customerId], references: [id], onDelete: Cascade)
   stylistId         String
   stylist           User  @relation(fields: [stylistId], references: [id], onDelete: Cascade)
   pointId           String?

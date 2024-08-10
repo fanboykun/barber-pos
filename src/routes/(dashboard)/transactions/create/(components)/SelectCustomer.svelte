@@ -7,6 +7,8 @@
     import * as Dialog from "$lib/components/ui/dialog/index"
     import * as Table from "$lib/components/ui/table/index"
 	import Input from "$lib/components/ui/input/input.svelte";
+	import { enhance } from "$app/forms";
+	import type { SubmitFunction } from "@sveltejs/kit";
 
     export let setCustomer: Function
 
@@ -14,14 +16,12 @@
     let selectedCustomer: Customers|null
     let isSearchCustomerDialogOpen = false
 
-    async function getCustomers() {
-        try {
-            const res = await fetch('getCustomers')
-            const d = await res.json()
-            customers = d
+    const getCustomers: SubmitFunction = () => {
+        return async ({ result }) => {
+            if(result.type != "success") return
             isSearchCustomerDialogOpen = true
-        } catch (err) {
-            console.log(err)
+            if(result.data == undefined) return
+            customers = result.data.allMembers as Customers[]
         }
     }
 
@@ -94,7 +94,9 @@
         </div>
         <div class="flex flex-col gap-2">
             <Button type="button" class="underline" > Scan </Button>
-            <Button type="button" variant="secondary" class="underline bg-gray-200" on:click={() => getCustomers()} > Search </Button>
+            <form action="?/getCustomers" method="POST" use:enhance={getCustomers} >
+                <Button type="submit" variant="secondary" class="underline bg-gray-200" > Search </Button>
+            </form>
             <Button type="button" on:click={() => selectedCustomer = null} variant="destructive" disabled={selectedCustomer == null} class="underline" > Clear </Button>
         </div>
     </div>

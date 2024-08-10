@@ -13,6 +13,8 @@
 	import SelectTreatments from './(components)/SelectTreatments.svelte';
 	import SelectCustomer from './(components)/SelectCustomer.svelte';
 	import SelectDiscount from './(components)/SelectDiscount.svelte';
+	import type { SubmitFunction } from "@sveltejs/kit";
+	import { goto } from "$app/navigation";
   
   export let data
   export let form
@@ -27,7 +29,7 @@
   let normalPrice: number = 0
   let totalDiscount: number = 0
   
-  let currentPoint: number = 50
+  let currentPoint: number = 0
 
   function setStylist(stylist: User|null) {
     selectedStylist = stylist
@@ -61,6 +63,31 @@
     if(normalPrice == 0 || totalPrice == 0 || selectedPoint == null) return
     totalDiscount = normalPrice * selectedPoint.discount / 100
     totalPrice = normalPrice - totalDiscount
+  }
+
+  const handleCreateTransaction: SubmitFunction = ( { formData, cancel } ) => {
+    if(selectedStylist == null && selectedTreatment == null && normalPrice == 0 && totalPrice == 0) { return cancel() } 
+    if(selectedStylist != null) {
+      formData.append('stylistId', selectedStylist.id as string)
+    }
+    if(selectedCustomer != null) {
+      formData.append('customerId', selectedCustomer.id as string)
+    }
+    if(selectedTreatment != null) {
+      formData.append('treatmentId', selectedTreatment.id as string)
+      formData.append('totalPoint', selectedTreatment.point as unknown as string)
+    }
+    if(selectedPoint != null) {
+      formData.append('pointId', selectedPoint.id as string)
+    }
+    formData.append('normalPrice', normalPrice as unknown as string)
+    formData.append('totalDiscount', totalDiscount as unknown as string)
+    formData.append('totalPrice', totalPrice as unknown as string)
+
+    return async ( {result} ) => {
+      if(result.type == "error" || result.type == "failure" ) return
+      return goto('/transactions')
+    }
   }
 
   $: if(selectedStylist != null && selectedTreatment != null && normalPrice != 0 && totalPrice != 0) { isTransactionSubmitable = true }
@@ -190,7 +217,9 @@
           </div>
 
           <div class="w-full">
-            <Button class="w-full disabled:cursor-not-allowed" type="submit" disabled={!isTransactionSubmitable} >Submit</Button>
+            <form action="?/createTransaction" method="post" use:enhance={handleCreateTransaction}>
+              <Button class="w-full disabled:cursor-not-allowed" type="submit" disabled={!isTransactionSubmitable} >Submit</Button>
+            </form>
           </div>
 
         </div>

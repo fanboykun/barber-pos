@@ -1,22 +1,24 @@
 import { Validator, type finalValidationResult, type validateType } from "ts-input-validator"
-
-export const validateAddTreatment = ( name: string|null, price: number|null, point: number|null, sub_service: string|null ): finalValidationResult => {
-    const validationInput: validateType[] = [
-        { data: name, key: 'name', rules: ['required', 'string'] },
-        { data: price, key: 'price', rules: ['required', 'number'] },
-        { data: point, key: 'point', rules: ['required', 'number', 'min:0'] },
-        { data: sub_service, key: 'sub_service', rules: ['nullable', 'string'] },
-    ]
-    return Validator.validate(validationInput)
+export type TransactionFormData = {
+    stylistId: string|null|undefined,
+    customerId: string|null|undefined,
+    treatmentId: string|null|undefined,
+    pointId: string|null|undefined,
+    normalPrice: number|null|undefined,
+    totalDiscount: number|null|undefined,
+    totalPrice: number|null|undefined,
+    totalPoint: number|null|undefined
 }
-
-export const validateUpdateTreatment = ( id:string, name: string|null, price: number|null, point: number|null, sub_service: string|null ): finalValidationResult => {
+export const validateAddTransaction = ( data: TransactionFormData ): finalValidationResult => {
     const validationInput: validateType[] = [
-        { data: id, key: 'id', rules: ['required', 'string', 'uuid'] },
-        { data: name, key: 'name', rules: ['required', 'string'] },
-        { data: price, key: 'price', rules: ['required', 'number'] },
-        { data: point, key: 'point', rules: ['required', 'number', 'min:0'] },
-        { data: sub_service, key: 'sub_service', rules: ['nullable', 'string'] },
+        { data: data.stylistId, key: 'stylistId', rules: ['required', 'string'] },
+        { data: data.customerId, key: 'customerId', rules: ['nullable', 'string'] },
+        { data: data.treatmentId, key: 'treatmentId', rules: ['required', 'string'] },
+        { data: data.pointId, key: 'pointId', rules: ['nullable', 'string'] },
+        { data: data.normalPrice, key: 'normalPrice', rules: ['required', 'number'] },
+        { data: data.totalDiscount, key: 'totalDiscount', rules: ['nullable', 'number'] },
+        { data: data.totalPrice, key: 'totalPrice', rules: ['required', 'number'] },
+        { data: data.totalPoint, key: 'totalPoint', rules: ['required', 'number'] },
     ]
     return Validator.validate(validationInput)
 }

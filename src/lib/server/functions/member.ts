@@ -17,6 +17,37 @@ export const getAllMembers = async() => {
     }
 }
 
+export const getAllMembersWithPagination = async (search: string = '', skip: number = 0, take: number = 10) => {
+    try {
+        const data = await db.customers.findMany({
+            skip: skip,
+            take: take,
+            where: {
+                name: {
+                  contains: search,
+                },
+              },
+            orderBy: {
+                name: 'desc'
+            }
+        })
+        return data
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}
+
+export const getMembersCount = async () => {
+    try {
+        const data = await db.customers.count()
+        return data
+    } catch (err) {
+        console.log(err)
+        return null
+    }
+}
+
 export const getMemberById = async(id: string) => {
     try {
         const data = await db.customers.findUnique({
@@ -78,6 +109,29 @@ export const updateMember = async(id: string, phone: number, name: string, passw
         })
         return updatedMember
     } catch(err) {
+        console.log(err)
+        return null
+    }
+}
+/**
+ * @param id member id
+ * @param usedPoint point used from selected Point for discount
+ * @param additionPoint point the members get after transaction
+ */
+export const updateMemberPointAfterTransaction = async ( id: string, currentPoint: number, usedPoint: number, additionPoint: number ) => {
+    try {
+        if(currentPoint < usedPoint) return null
+        const totalPoint = currentPoint - usedPoint + additionPoint
+        const data = await db.customers.update({
+            where: {
+                id: id
+            },
+            data: {
+                total_point: totalPoint
+            }
+        })
+        return data
+    } catch (err) {
         console.log(err)
         return null
     }
