@@ -1,4 +1,3 @@
-
 import {  redirect, type Action, type Actions } from "@sveltejs/kit"
 import type { PageServerLoad } from "./$types"
 import { getAllTransactions } from "$lib/server/functions/transaction";

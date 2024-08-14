@@ -1,16 +1,27 @@
 <script lang="ts">
-	import Label from "$lib/components/ui/label/label.svelte";
+	import Button from "$lib/components/ui/button/button.svelte";
+import Label from "$lib/components/ui/label/label.svelte";
 	import type { Points } from "@prisma/client";
 
   export let points: Points[]
   export let currentPoint: number = 0
   export let setDiscount: Function
 
-  let selectedPoint: Points|null
+  export let selectedPoint: Points|null
 </script>
 
 <div class="grid w-full  items-center gap-1.5">
-    <Label for="name">Discount by Point</Label>
+  <div class="flex w-full gap-x-6 items-center">
+    <Label for="name" class="py-2">Discount by Point</Label>
+    {#if selectedPoint}
+    <button type="button" on:click={() => { setDiscount(null); selectedPoint = null }}>
+      <span class="sr-only">clear</span>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-red-500">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      </svg>      
+    </button>
+    {/if}
+  </div>
     <div class="flex flex-grow gap-2 overflow-x-auto whitespace-nowrap pt-1 pb-2">
       {#each points as point}
         <button type="button" on:click={() => { setDiscount(point); selectedPoint = point } } disabled={currentPoint < point.minimum} class="relative grid select-none items-center whitespace-nowrap rounded-xl border px-4 py-2.5 font-sans text-xs font-bold transition-all disabled:cursor-not-allowed {selectedPoint?.id == point.id ? 'text-white bg-gray-900' : 'text-gray-900 bg-gray-50' } {currentPoint < point.minimum ? 'opacity-50' : ''}">

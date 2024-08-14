@@ -1,4 +1,4 @@
-import { v4 as uuid } from "uuid";
+// import { v4 as uuid } from "uuid";
 import db from "../utils/prisma";
 import { Argon2id } from "oslo/password";
 
@@ -16,8 +16,7 @@ export const getAllMembers = async() => {
         return null
     }
 }
-
-export const getAllMembersWithPagination = async (search: string = '', skip: number = 0, take: number = 10) => {
+export const getAllMembersWithPagination = async ( { search = '', skip = 0, take = 10 } ) => {
     try {
         const data = await db.customers.findMany({
             skip: skip,
@@ -136,3 +135,80 @@ export const updateMemberPointAfterTransaction = async ( id: string, currentPoin
         return null
     }
 }
+
+export const getMembersTotalTransaction = async (memberId: string) => {
+    try {
+        const data = await db.transactions.count({
+            where: {
+                customerId: memberId
+            }
+        })
+        return data
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}
+
+export const getMembersTotalPointsUsed = async (memberId: string) => {
+    try {
+        const data = await db.transactions.findMany({
+            where: {
+                customerId: memberId
+            },
+            include: {
+                point: {
+                    select: { minimum: true }
+                }
+            }
+        })
+        return data
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}
+
+export const getMembersTotalMoneySaved = async (memberId: string) => {
+    try {
+        const data = await db.transactions.aggregate({
+            where: {
+                customerId: memberId
+            }, 
+            _sum: {
+                totalDiscount: true
+            }
+        })
+        return data
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}
+
+export const getMembersTransaction = async (memberId: string) => {
+    try {
+        const data = await db.transactions.findMany({
+            where: {
+                customerId: memberId
+            }, 
+            include: {
+                stylist: {
+                    select: { name: true }
+                }, 
+                transactionDetails: {
+                    include: {
+                        treatment: { select: { name: true } }
+                    }
+                }
+            },
+            take: 10,
+            skip: 0
+        })
+        return data
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}
+

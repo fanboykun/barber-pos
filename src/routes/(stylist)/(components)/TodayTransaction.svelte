@@ -1,5 +1,8 @@
 <script lang="ts">
 	import * as Table from "$lib/components/ui/table";
+	import type { Transactions } from "@prisma/client";
+    export let transactions: Transactions[]
+    console.log(transactions)
 </script>
 
 <div class="flex flex-col w-full space-y-2">

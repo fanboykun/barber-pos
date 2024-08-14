@@ -121,3 +121,56 @@ export const getStylistWithTransactionById = async(id: string) => {
         return null
     }
 }
+
+export const getStylistTransactions = async(stylistId: string) => {
+    try {
+        const stylist = await db.transactions.findMany({
+            where: {
+                stylistId: stylistId
+            },
+            include: { 
+                transactionDetails: {
+                    include: { treatment: { select: { name: true, price: true, point: true } } }
+                },
+                point: { select: { name: true, minimum: true, discount: true } },
+                customer: { select: { name: true } },
+                
+            }
+        })
+        return stylist
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}
+
+export const getStylistTotalRevenue = async(stylistId: string) => {
+    try {
+        const revenue = await db.transactions.aggregate({
+            where: {
+                stylistId: stylistId
+            },
+            _sum: {
+                totalPrice: true
+            }
+        })
+        return revenue
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}
+
+export const getStylistTotalTransaction = async(stylistId: string) => {
+    try {
+        const count = await db.transactions.count({
+            where: {
+                stylistId: stylistId
+            }
+        })
+        return count
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}

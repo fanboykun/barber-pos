@@ -22,7 +22,11 @@ export const getAllTransactions = async() => {
                 customer: true,
                 stylist: true,
                 point: true,
-                transactionDetails: true,
+                transactionDetails: {
+                    include: {
+                        treatment: true
+                    }
+                },
             }
         })
         return transactions

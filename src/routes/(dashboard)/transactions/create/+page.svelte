@@ -46,7 +46,10 @@
   function setCustomer(customer: Customers|null) {
     selectedCustomer = customer
     if(!customer) {
-      currentPoint = 0
+      currentPoint = 0  // reset point when customer resetted
+      totalDiscount = 0 // reset discount when customer resetted
+      totalPrice = normalPrice  // reset the price
+      setDiscount(null) // reset the selected point 
     } else {
       currentPoint  = customer?.total_point
     }
@@ -55,6 +58,10 @@
 
   function setDiscount(point: Points|null) {
     selectedPoint = point
+    if(!point) {
+      totalDiscount = 0 // reset discount when point/discount resetted
+      totalPrice = normalPrice  // reset the price after point/discount resetted
+    }
     calculateDiscount()
   }
 
@@ -122,7 +129,7 @@
                   {/if}
                   <SelectCustomer {setCustomer} />
                    {#if all.points}
-                    <SelectDiscount points={all.points} {currentPoint} {setDiscount} />
+                    <SelectDiscount points={all.points} {currentPoint} {setDiscount} {selectedPoint} />
                    {/if}
                 </div>
             </div>

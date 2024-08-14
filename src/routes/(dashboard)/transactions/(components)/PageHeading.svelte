@@ -6,7 +6,7 @@
         <h3 class="text-lg font-medium">Transaction List</h3> 
         <p class="text-sm text-muted-foreground">Summary of your application. (Example of a dashboard card stats)</p>
     </div>
-    <Button variant="link" href="transactions/create">
+    <Button variant="link" href="transactions/create" class="bg-slate-900 text-white hover:no-underline">
         Add New
     </Button>
 </div>

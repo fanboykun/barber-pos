@@ -13,10 +13,21 @@
     export let setCustomer: Function
 
     let customers: Customers[]|null
+    let customersCount = 0
     let selectedCustomer: Customers|null
     let isSearchCustomerDialogOpen = false
 
-    const getCustomers: SubmitFunction = () => {
+    const getCustomers: SubmitFunction = ({ formData }) => {
+        return async ({ result }) => {
+            if(result.type != "success") return
+            isSearchCustomerDialogOpen = true
+            if(result.data == undefined) return
+            customers = result.data.allMembers as Customers[]
+            customersCount = result.data.membersCount
+        }
+    }
+
+    const getCustomersViaSearch: SubmitFunction = ({ formData }) => {
         return async ({ result }) => {
             if(result.type != "success") return
             isSearchCustomerDialogOpen = true
@@ -97,7 +108,7 @@
             <form action="?/getCustomers" method="POST" use:enhance={getCustomers} >
                 <Button type="submit" variant="secondary" class="underline bg-gray-200" > Search </Button>
             </form>
-            <Button type="button" on:click={() => selectedCustomer = null} variant="destructive" disabled={selectedCustomer == null} class="underline" > Clear </Button>
+            <Button type="button" on:click={() => { setCustomer(null); selectedCustomer = null } } variant="destructive" disabled={selectedCustomer == null} class="underline" > Clear </Button>
         </div>
     </div>
 
@@ -110,9 +121,18 @@
           Search customer by name or phone then select it to create transaction
         </Dialog.Description>
       </Dialog.Header>
-      <Input name="searchCustomer" type="search" placeholder="search customer by name or phone" />
+      <form action="?/getCustomers" method="POST" use:enhance={getCustomersViaSearch} class="flex gap-x-2">
+          <Input name="searchCustomer" type="search" placeholder="search customer by name or phone" />
+        <Button class="flex gap-x-1" type="submit">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>
+        </Button>
+      </form>
       <Table.Root>
-        <Table.Caption>Please search the customers</Table.Caption>
+        {#if !customers}
+        <Table.Caption>list of customers</Table.Caption>
+        {/if}
         <Table.Header>
           <Table.Row>
             <Table.Head>Name</Table.Head>
@@ -134,6 +154,31 @@
             {/if}
         </Table.Body>
       </Table.Root>
+        <!-- Footer -->
+            <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
+              <div>
+                <p class="text-sm text-gray-600 dark:text-neutral-400">
+                  <span class="font-semibold text-gray-800 dark:text-neutral-200">{customersCount}</span> results
+                </p>
+              </div>
+              {#if  customersCount > 10}
+              <div>
+                <div class="inline-flex gap-x-2">
+                  <button type="button" class="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                    Prev
+                  </button>
+  
+                  <button type="button" class="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                    Next
+                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                  </button>
+                </div>
+              </div>
+              {/if}
+
+            </div>
+        <!-- End Footer -->
       <Dialog.Footer>
         <Button type="button" variant="secondary" on:click={() =>  isSearchCustomerDialogOpen = false}> Close </Button>
       </Dialog.Footer>
