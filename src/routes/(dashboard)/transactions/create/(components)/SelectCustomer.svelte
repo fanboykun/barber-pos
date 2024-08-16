@@ -9,6 +9,7 @@
 	import Input from "$lib/components/ui/input/input.svelte";
 	import { enhance } from "$app/forms";
 	import type { SubmitFunction } from "@sveltejs/kit";
+	import ScanQr from "./ScanQr.svelte";
 
     export let setCustomer: Function
 
@@ -16,6 +17,7 @@
     let customersCount = 0
     let selectedCustomer: Customers|null
     let isSearchCustomerDialogOpen = false
+    let isScanCustomerDialogOpen = false
 
     const getCustomers: SubmitFunction = ({ formData }) => {
         return async ({ result }) => {
@@ -35,6 +37,15 @@
             customers = result.data.allMembers as Customers[]
         }
     }
+
+    function receiveCustomerAfterScan(customer: Customers|undefined = undefined) {
+        isScanCustomerDialogOpen = ! isScanCustomerDialogOpen
+        if(!customer) return
+        setCustomer(customer);
+        selectedCustomer = customer;
+    }
+
+
 
 </script>
 <div class="grid w-full  items-center gap-1.5">
@@ -104,7 +115,7 @@
             {/if}
         </div>
         <div class="flex flex-col gap-2">
-            <Button type="button" class="underline" > Scan </Button>
+            <Button type="button" class="underline" on:click={() => { isScanCustomerDialogOpen = true }} > Scan </Button>
             <form action="?/getCustomers" method="POST" use:enhance={getCustomers} >
                 <Button type="submit" variant="secondary" class="underline bg-gray-200" > Search </Button>
             </form>
@@ -183,4 +194,6 @@
         <Button type="button" variant="secondary" on:click={() =>  isSearchCustomerDialogOpen = false}> Close </Button>
       </Dialog.Footer>
     </Dialog.Content>
-  </Dialog.Root>
+</Dialog.Root>
+
+<ScanQr {isScanCustomerDialogOpen} onClose={receiveCustomerAfterScan}/>

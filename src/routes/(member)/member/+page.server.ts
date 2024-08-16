@@ -5,7 +5,7 @@ import { getMembersTotalMoneySaved, getMembersTotalPointsUsed, getMembersTotalTr
 
 export const load: PageServerLoad =  async(event) => {
     if (!event.locals.customer) {
-        redirect(302, '/sign-in');
+        return redirect(302, '/sign-in');
     }
     const allTransaction = await getMembersTransaction(event.locals.customer.id)
     const totalTransaction = await getMembersTotalTransaction(event.locals.customer.id)

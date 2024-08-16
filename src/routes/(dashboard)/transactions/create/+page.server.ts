@@ -34,7 +34,6 @@ export const load = async (event) => {
 const getCustomers: Action = async ({request}) => {
     const f = await request.formData()
     const search = f.get('searchCustomer') as unknown as string ?? ''
-    console.log(search)
     const [allMembers, membersCount] = await Promise.all([getAllMembersWithPagination({ search: search }), getMembersCount()])
     return { 
         'allMembers': allMembers,
@@ -77,4 +76,14 @@ const createTransaction: Action = async ( { request } ) => {
 
 }
 
-export const actions: Actions = { getCustomers, createTransaction }
+const getCustomer: Action = async ( { request } ) => {
+    const f = await request.formData()
+    const customerId = f.get('customerId') as unknown as string
+    // console.log('customer id from form', customerId)
+    const customer = await getMemberById(customerId)
+    // console.log('customer data from server', customer)
+    console.log('attempted search customer by scan')
+    return customer
+}
+
+export const actions: Actions = { getCustomers, createTransaction, getCustomer }

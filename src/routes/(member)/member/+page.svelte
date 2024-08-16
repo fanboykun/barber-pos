@@ -2,6 +2,8 @@
 	import { browser } from '$app/environment';
 	import { createGradientAvatar } from '$lib/client/utils/index.js';
 	import Badge from '$lib/components/ui/badge/badge.svelte';
+    import QRCode from '@castlenine/svelte-qrcode';
+
 
     export let data
 	// console.log(data)
@@ -127,7 +129,11 @@
                 <div class="flex items-center p-2 justify-center w-full">
                     <div class="flex items-center justify-center rounded-xl border bg-card text-card-foreground shadow w-full">
                         <!-- qr image here -->
-						 <img src="tes-qr.png" alt="" class="">
+						 <!-- <img src="tes-qr.png" alt="" class=""> -->
+						  <div class="py-4">
+							  <QRCode data={data.customer?.id} />
+						  </div>
+						  
                     </div>
                 </div>
 
