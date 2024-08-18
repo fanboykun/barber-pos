@@ -112,15 +112,57 @@ export const updateMember = async(id: string, phone: number, name: string, passw
         return null
     }
 }
+
+export const getMemberTotalPointById = async (customerId: string) => {
+    try {
+        const data = await db.customers.findFirst({
+            where: {
+                id: customerId
+            },
+            select: {
+                total_point: true
+            }
+        })
+        return data
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}
+
 /**
+ * update member's total_point value after transaction with discount
  * @param id member id
  * @param usedPoint point used from selected Point for discount
  * @param additionPoint point the members get after transaction
  */
-export const updateMemberPointAfterTransaction = async ( id: string, currentPoint: number, usedPoint: number, additionPoint: number ) => {
+export const updateMemberPointAfterTransactionWithDiscount = async ( id: string, currentPoint: number, usedPoint: number, additionPoint: number ) => {
     try {
         if(currentPoint < usedPoint) return null
         const totalPoint = currentPoint - usedPoint + additionPoint
+        const data = await db.customers.update({
+            where: {
+                id: id
+            },
+            data: {
+                total_point: totalPoint
+            }
+        })
+        return data
+    } catch (err) {
+        console.log(err)
+        return null
+    }
+}
+
+/**
+ * update member's total_point value after transaction without discount
+ * @param id member id
+ * @param additionPoint point the members get after transaction
+ */
+export const updateMemberPointAfterTransactionWithoutDiscount = async ( id: string, currentPoint: number, additionPoint: number ) => {
+    try {
+        const totalPoint = currentPoint + additionPoint
         const data = await db.customers.update({
             where: {
                 id: id
@@ -203,7 +245,10 @@ export const getMembersTransaction = async (memberId: string) => {
                 }
             },
             take: 10,
-            skip: 0
+            skip: 0,
+            orderBy: {
+                createdAt: 'desc'
+            }
         })
         return data
     } catch(err) {

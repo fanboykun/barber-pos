@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { getMembersTotalMoneySaved, getMembersTotalPointsUsed, getMembersTotalTransaction, getMembersTransaction } from "$lib/server/functions/member";
+import { getMembersTotalMoneySaved, getMembersTotalPointsUsed, getMembersTotalTransaction, getMembersTransaction, getMemberTotalPointById } from "$lib/server/functions/member";
 
 export const load: PageServerLoad =  async(event) => {
     if (!event.locals.customer) {
         return redirect(302, '/sign-in');
     }
+    const currentTotalPoint = await getMemberTotalPointById(event.locals.customer.id)
     const allTransaction = await getMembersTransaction(event.locals.customer.id)
     const totalTransaction = await getMembersTotalTransaction(event.locals.customer.id)
     const totalMoneySaved = await getMembersTotalMoneySaved(event.locals.customer.id)
@@ -21,7 +22,6 @@ export const load: PageServerLoad =  async(event) => {
         pointsSum.forEach((p) => {
             totalPointUsed += p
         })
-        console.log(totalPointUsed)
     }
-    return { allTransaction, totalTransaction, totalMoneySaved, totalPointUsed }
+    return { currentTotalPoint, allTransaction, totalTransaction, totalMoneySaved, totalPointUsed }
 }

@@ -1,14 +1,16 @@
 import {  redirect, type Action, type Actions } from "@sveltejs/kit"
 import type { PageServerLoad } from "./$types"
-import { getAllTransactions } from "$lib/server/functions/transaction";
+import { getAllTransactionsWithPagination, getTransactionsCount } from "$lib/server/functions/transaction";
 
 export const load: PageServerLoad = async (event) => {
     if (!event.locals.session) {
         return redirect(302, '/');
      }
-    const transactions = getAllTransactions()
+    const transactions = getAllTransactionsWithPagination()
+    const transactionCount = await getTransactionsCount()
     return {
-        transactions
+        transactions,
+        transactionCount
     }
 }
 

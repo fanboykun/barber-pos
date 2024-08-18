@@ -1,12 +1,10 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import { createGradientAvatar } from '$lib/client/utils/index.js';
+	import { formatCurrency } from '$lib/client/utils/index.js';
 	import Badge from '$lib/components/ui/badge/badge.svelte';
     import QRCode from '@castlenine/svelte-qrcode';
 
-
     export let data
-	// console.log(data)
+	
 </script>
 <div class="h-full bg-gray-50">
 	<div class="px-8 pt-4 pb-2 bg-gray-50">
@@ -37,7 +35,7 @@
 					>
 				</div>
 				<div class="p-6 pt-0">
-					<div class="text-2xl font-bold">{data.customer?.total_point} Point</div>
+					<div class="text-2xl font-bold">{data.currentTotalPoint?.total_point ?? 0} Point</div>
 					<p class="text-xs text-muted-foreground">your current total point</p>
 				</div>
 			</div>
@@ -109,7 +107,7 @@
 					>
 				</div>
 				<div class="p-6 pt-0">
-					<div class="text-2xl font-bold">{ data.totalMoneySaved?._sum.totalDiscount?.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }).split(',').at(0) }</div>
+					<div class="text-2xl font-bold">{ formatCurrency(data.totalMoneySaved?._sum.totalDiscount) }</div>
 					<p class="text-xs text-muted-foreground">your total Transactions</p>
 				</div>
 			</div>

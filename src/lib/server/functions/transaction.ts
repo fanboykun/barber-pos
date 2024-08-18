@@ -36,6 +36,63 @@ export const getAllTransactions = async() => {
     }
 }
 
+export const getAllTransactionsWithPagination = async (skip = 0, take = 10) => {
+    try {
+        const transactions = await db.transactions.findMany({
+            orderBy: {
+                createdAt: 'desc'
+            },
+            include: {
+                customer: {
+                    select: {
+                        id: true,
+                        name: true,
+                        total_point: true,
+                        phone: true
+                    }
+                },
+                stylist: {
+                    select: {
+                        id: true,
+                        name: true,
+                        code: true,
+                        email: true
+                    }
+                },
+                point: {
+                    select: {
+                        id: true,
+                        name: true,
+                        minimum: true,
+                        discount: true
+                    }
+                },
+                transactionDetails: {
+                    include: {
+                        treatment: true
+                    }
+                },
+            },
+            skip: skip,
+            take: take,
+        })
+        return transactions
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}
+
+export const getTransactionsCount = async () => {
+    try {
+        const data = await db.transactions.count()
+        return data
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}
+
 export const getTransactionById = async(id: string) => {
     try {
         const transaction = await db.transactions.findUnique({

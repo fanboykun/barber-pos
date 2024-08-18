@@ -1,4 +1,4 @@
-import { getAllMembersWithPagination, getMemberById, getMembersCount, updateMemberPointAfterTransaction } from '$lib/server/functions/member.js'
+import { getAllMembersWithPagination, getMemberById, getMembersCount, updateMemberPointAfterTransactionWithDiscount, updateMemberPointAfterTransactionWithoutDiscount } from '$lib/server/functions/member.js'
 import { getAllPoints, getPointById } from '$lib/server/functions/point.js'
 import { getAllStylists } from '$lib/server/functions/stylist.js'
 import { getAllTreatments } from '$lib/server/functions/treatment.js'
@@ -60,19 +60,28 @@ const createTransaction: Action = async ( { request } ) => {
         // if customer & point provided, check it's existance
         let member: Customers|null = null
         let point: Points|null = null
-        if(data.customerId && data.pointId) {
-            [point, member] = await Promise.all([getPointById(data.pointId), getMemberById(data.customerId)])
-        }
+        if(data.customerId) { member = await getMemberById(data.customerId) }
+        if(data.pointId) { point = await getPointById(data.pointId) }
+
         // save transaction to db
         const transaction = await addTransaction(data as TransactionFormDataValidated)
-        // update the member's point value
-        if(transaction && member != null && point != null) {
-            if(member.total_point < point.minimum) return fail(400, { message: 'Failed to update point, member`s current point must be greater than minimum discount point' })
-            const updatedMemberPoint = updateMemberPointAfterTransaction(member.id, member.total_point, point.minimum , data.totalPoint) // customer id is required
-            if(!updatedMemberPoint) return fail(400, { message: 'Failed to update point, unable to update member`s current point ' })
+        if(!transaction) return fail(400, { message: 'Failed to create Transaction', success: false })
+
+        // update the member's point value if member exists
+        if(member) {
+            // update member's point if discount is selected
+            if(point) {
+                if(member.total_point < point.minimum) return fail(400, { message: 'Failed to update point, member`s current point must be greater than minimum discount point' })
+                const updatedMemberPoint = await updateMemberPointAfterTransactionWithDiscount(member.id, member.total_point, point.minimum , data.totalPoint) // customer id is required
+                if(!updatedMemberPoint) return fail(400, { message: 'Failed to update point, unable to update member`s current point ' })
+            }else {
+                // update member's point if discount is not selected
+                const updatedMemberPoint = await updateMemberPointAfterTransactionWithoutDiscount(member.id, member.total_point, data.totalPoint) // customer id is required
+                if(!updatedMemberPoint) return fail(400, { message: 'Failed to update point, unable to update member`s current point ' })
+            }
         }
         return transaction
-    } catch (err) { return fail(400, { message: 'Failed to create Transaction' }) }
+    } catch (err) { return fail(400, { message: 'Failed to create Transaction', success: false }) }
 
 }
 
@@ -82,7 +91,7 @@ const getCustomer: Action = async ( { request } ) => {
     // console.log('customer id from form', customerId)
     const customer = await getMemberById(customerId)
     // console.log('customer data from server', customer)
-    console.log('attempted search customer by scan')
+    // console.log('attempted search customer by scan')
     return customer
 }
 

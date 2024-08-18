@@ -1,18 +1,18 @@
 <script lang="ts">
-	import Input from "$lib/components/ui/input/input.svelte";
 	import type { Transactions } from "@prisma/client";
 	import type { ActionData } from "../$types";
 	import { page } from "$app/stores";
+	import { formatCurrency, formatDay, formatTime } from "$lib/client/utils";
+	// import type { getAllTransactionsWithPagination } from "$lib/server/functions/transaction";
 
     export let transactions: typeof $page.data.transactions
+    // export let transactions: typeof getAllTransactionsWithPagination
+    // export let count: number|null = 0
     export let form: ActionData
 
-    console.log(transactions)
-    
     let selectedTransaction: Transactions|null = null   // transaction to edit or delete
     let isOpen = false  // transaction form state
     let isAlertDeleteOpen = false   // delete transaction dialog state
-    let search = '' // search transaction input binding
 
     /** function to manipulate state and data for form and delete dialog/modal */
     const changeDialogState = (dialog: "form"|"delete", state: boolean, transaction: Transactions|null = null) => {
@@ -22,16 +22,9 @@
     }
 
 
-    /** client side data searching based on treatment name */
-    function searchTreatment(s: string) {
-  
-    }
+
 
 </script>
- <!-- Search -->
- <!-- <div class="flex gap-x-2 w-full px-4 sm:px-8 py-2 rounded-md bg-gray-50">
-    <Input placeholder="search treatment by name" type="search" bind:value={search} />
- </div> -->
 
 <!-- Table Section -->
 <div class="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto py-4">
@@ -111,7 +104,7 @@
                         <img class="inline-block size-[38px] rounded-full" src="https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80" alt="Image Description">
                         <div class="grow">
                           <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{transaction.stylist.name}</span>
-                          <span class="block text-sm text-gray-500 ">{transaction.stylist.code}</span>
+                          <span class="block text-sm text-gray-500 ">{transaction.stylist?.code ?? ''}</span>
                         </div>
                       </div>
                     </div>
@@ -128,16 +121,24 @@
 
                   <td class="size-px whitespace-nowrap">
                     <div class="px-6 py-3">
-                      <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
-                        {transaction.customer?.name}
+                      {#if transaction.customer}
+                      <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full">
+                        {transaction.customer.name}
                       </span>
+                      {:else}
+                      <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-red-100 text-red-600 rounded-full">
+                        Guest
+                      </span>
+                      {/if}
                     </div>
                   </td>
 
                   <td class="h-px w-72 whitespace-nowrap">
                     <div class="px-6 py-3">
-                      <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{transaction.totalDiscount.toLocaleString('id-ID', {  style: 'currency', currency: 'IDR' }).split(',').at(0)}</span>
+                      <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{ formatCurrency(transaction.totalDiscount)}</span>
+                      {#if transaction.point }
                       <span class="block text-xs text-gray-500 ">{transaction.point?.minimum} Point <span>&#9702;</span> {transaction.point?.discount} %</span>
+                      {/if}
                     </div>
                   </td>
 
@@ -145,7 +146,7 @@
                     <div class="px-6 py-3">
                       <div class="flex items-center gap-x-3">
                         <span class="text-sm text-gray-900 font-semibold">
-                        {transaction.totalPrice.toLocaleString("id-ID", { style: 'currency', currency: 'IDR' }).split(',').at(0)}
+                          {formatCurrency(transaction.totalPrice)}
                         </span>
                       </div>
                     </div>
@@ -153,9 +154,8 @@
 
                   <td class="h-px w-72 whitespace-nowrap">
                     <div class="px-6 py-3">
-                      <span class="block text-xs text-gray-500 ">{transaction.createdAt.toLocaleString('id-ID', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })}</span>
-                      <span class="block text-xs text-gray-500 ">{transaction.createdAt.toLocaleString('id-ID', { hour: 'numeric', minute: 'numeric', timeZoneName: 'short' }).replace('.', ':')}</span>
-                      <!-- <span class="block text-xs text-gray-500 ">{transaction.createdAt.getHours()}:{transaction.createdAt.getMinutes()}</span> -->
+                      <span class="block text-xs text-gray-500 ">{formatDay(transaction.createdAt)}</span>
+                      <span class="block text-xs text-gray-500 ">{formatTime(transaction.createdAt)}</span>
                     </div>
                   </td>
                   
@@ -179,29 +179,7 @@
             </table>
             <!-- End Table -->
   
-            <!-- Footer -->
-            <!-- <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
-              <div>
-                <p class="text-sm text-gray-600 dark:text-neutral-400">
-                  <span class="font-semibold text-gray-800 dark:text-neutral-200">12</span> results
-                </p>
-              </div>
-  
-              <div>
-                <div class="inline-flex gap-x-2">
-                  <button type="button" class="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
-                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-                    Prev
-                  </button>
-  
-                  <button type="button" class="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
-                    Next
-                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                  </button>
-                </div>
-              </div>
-            </div> -->
-            <!-- End Footer -->
+           <slot />
           </div>
         </div>
       </div>

@@ -64,3 +64,15 @@ export function formDataToObject(formData: FormData): { [key: string]: FormDataE
 
     return obj;
 }
+
+export const formatCurrency = (data: number|null|undefined) => {
+    return data?.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })?.split(',')?.at(0) ?? 'Rp 0'
+}
+
+export const formatDay = (date: Date) => {
+    return date.toLocaleString('id-ID', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })
+}
+
+export const formatTime = (date: Date) => {
+    return date.toLocaleString('id-ID', { hour: 'numeric', minute: 'numeric', timeZoneName: 'short' }).replace('.', ':')
+}

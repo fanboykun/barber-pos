@@ -92,7 +92,9 @@
     formData.append('totalPrice', totalPrice as unknown as string)
 
     return async ( {result} ) => {
-      if(result.type == "error" || result.type == "failure" ) return
+      if(result.type == "error" || result.type == "failure" ) {
+        return
+      }
       return goto('/transactions')
     }
   }
