@@ -83,6 +83,7 @@ export const getAllTransactionsWithPagination = async (skip = 0, take = 10) => {
     }
 }
 
+
 export const getTransactionsCount = async () => {
     try {
         const data = await db.transactions.count()
@@ -197,6 +198,20 @@ const addTransactionDetail = async (treatmentId: string, transactionId: string) 
             }
         })
         return transactionDetail
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}
+
+export const getTotalRevenue = async () => {
+    try {
+        const data = await db.transactions.aggregate({
+            _sum: {
+                totalPrice: true
+            }
+        })  
+        return data
     } catch(err) {
         console.log(err)
         return null

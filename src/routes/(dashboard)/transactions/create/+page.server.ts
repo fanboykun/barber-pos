@@ -54,7 +54,7 @@ const createTransaction: Action = async ( { request } ) => {
         'totalPoint': Number(form.get('totalPoint')) as unknown as number
     }
     const [err, res] = validateAddTransaction(data)
-    if(err) return fail(400, { message: 'Form is invalid', error: res })
+    if(err) return fail(400, { message: 'Form is invalid', error: res, success: false })
     
     try {
         // if customer & point provided, check it's existance
@@ -88,10 +88,8 @@ const createTransaction: Action = async ( { request } ) => {
 const getCustomer: Action = async ( { request } ) => {
     const f = await request.formData()
     const customerId = f.get('customerId') as unknown as string
-    // console.log('customer id from form', customerId)
     const customer = await getMemberById(customerId)
-    // console.log('customer data from server', customer)
-    // console.log('attempted search customer by scan')
+    if(!customer) return fail(401, { message: 'customer not found!', success: false })
     return customer
 }
 

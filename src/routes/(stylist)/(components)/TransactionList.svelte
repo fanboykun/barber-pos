@@ -1,13 +1,11 @@
 <script lang="ts">
-	import type { ActionData } from "../$types";
 	import { formatCurrency, formatDay, formatTime } from "$lib/client/utils";
 	import type { AllTransactionWithPagination } from "$lib/types";
 	import { enhance } from "$app/forms";
+	import type { ActionData } from "../stylist/$types";
 
     export let transactions: Exclude<AllTransactionWithPagination, null>
     export let form: ActionData
-
-
 
 </script>
 

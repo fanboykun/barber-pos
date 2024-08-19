@@ -174,3 +174,67 @@ export const getStylistTotalTransaction = async(stylistId: string) => {
         return null
     }
 }
+
+export const getTotalStylist = async() => {
+    try {
+        const count = await db.user.count({
+            where: {
+                role: 'USER'
+            }
+        })
+        return count
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}
+
+export const getStylistAllTransactionsWithPagination = async (stylistId: string, skip = 0, take = 10) => {
+    try {
+        const transactions = await db.transactions.findMany({
+            orderBy: {
+                createdAt: 'desc'
+            },
+            include: {
+                customer: {
+                    select: {
+                        id: true,
+                        name: true,
+                        total_point: true,
+                        phone: true
+                    }
+                },
+                stylist: {
+                    select: {
+                        id: true,
+                        name: true,
+                        code: true,
+                        email: true
+                    }
+                },
+                point: {
+                    select: {
+                        id: true,
+                        name: true,
+                        minimum: true,
+                        discount: true
+                    }
+                },
+                transactionDetails: {
+                    include: {
+                        treatment: true
+                    }
+                },
+            },
+            skip: skip,
+            take: take,
+            where: {
+                stylistId: stylistId
+            }
+        })
+        return transactions
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}

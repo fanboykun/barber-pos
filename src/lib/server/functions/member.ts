@@ -257,3 +257,13 @@ export const getMembersTransaction = async (memberId: string) => {
     }
 }
 
+export const getTotalMember = async () => {
+    try {
+        const data = await db.customers.count()
+        return data
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}
+

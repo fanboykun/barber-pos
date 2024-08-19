@@ -76,3 +76,15 @@ export const formatDay = (date: Date) => {
 export const formatTime = (date: Date) => {
     return date.toLocaleString('id-ID', { hour: 'numeric', minute: 'numeric', timeZoneName: 'short' }).replace('.', ':')
 }
+
+export const formatNumberUnit = (num: number) => {
+    if (num >= 1_000_000_000) {
+        return `${(num / 1_000_000_000).toFixed(1).split('.').at(0)}B`; // Billions
+    } else if (num >= 1_000_000) {
+        return `${(num / 1_000_000).toFixed(1).split('.').at(0)}M`; // Millions
+    } else if (num >= 1_000) {
+        return `${(num / 1_000).toFixed(1).split('.').at(0)}K`; // Thousands
+    } else {
+        return num.toString(); // Less than 1,000, no formatting
+    }
+}

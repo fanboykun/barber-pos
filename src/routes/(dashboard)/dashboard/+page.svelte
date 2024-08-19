@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { browser } from "$app/environment";
-	import { createGradientAvatar } from '$lib/client/utils'
+	import { createGradientAvatar, formatNumberUnit } from '$lib/client/utils'
 	import Badge from "$lib/components/ui/badge/badge.svelte";
 	import type { PageData } from "./$types";
 
 	export let data: PageData
+	console.log(data)
 </script>
 <div class="h-full bg-gray-50">
 	<div class="px-8 pt-4 pb-2 bg-gray-50">
@@ -34,13 +35,13 @@
 					>
 				</div>
 				<div class="p-6 pt-0">
-					<div class="text-2xl font-bold">$45,231.89</div>
-					<p class="text-xs text-muted-foreground">+20.1% from last month</p>
+					<div class="text-2xl font-bold">Rp {formatNumberUnit(data.totalRevenue)}</div>
+					<!-- <p class="text-xs text-muted-foreground">+20.1% from last month</p> -->
 				</div>
 			</div>
 			<div class="rounded-xl border bg-card text-card-foreground shadow">
 				<div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
-					<h3 class="tracking-tight text-sm font-medium">Subscriptions</h3>
+					<h3 class="tracking-tight text-sm font-medium">Total Member</h3>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="24"
@@ -58,13 +59,13 @@
 					>
 				</div>
 				<div class="p-6 pt-0">
-					<div class="text-2xl font-bold">+2350</div>
-					<p class="text-xs text-muted-foreground">+180.1% from last month</p>
+					<div class="text-2xl font-bold">{data.totalMember} Member(s)</div>
+					<!-- <p class="text-xs text-muted-foreground">+180.1% from last month</p> -->
 				</div>
 			</div>
 			<div class="rounded-xl border bg-card text-card-foreground shadow">
 				<div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
-					<h3 class="tracking-tight text-sm font-medium">Sales</h3>
+					<h3 class="tracking-tight text-sm font-medium">Total Transactions</h3>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="24"
@@ -85,13 +86,13 @@
 					>
 				</div>
 				<div class="p-6 pt-0">
-					<div class="text-2xl font-bold">+12,234</div>
-					<p class="text-xs text-muted-foreground">+19% from last month</p>
+					<div class="text-2xl font-bold">{data.totalTransaction} Time(s)</div>
+					<!-- <p class="text-xs text-muted-foreground">+19% from last month</p> -->
 				</div>
 			</div>
 			<div class="rounded-xl border bg-card text-card-foreground shadow">
 				<div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
-					<h3 class="tracking-tight text-sm font-medium">Active Now</h3>
+					<h3 class="tracking-tight text-sm font-medium">Total Stylist</h3>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="24"
@@ -107,8 +108,8 @@
 					>
 				</div>
 				<div class="p-6 pt-0">
-					<div class="text-2xl font-bold">+573</div>
-					<p class="text-xs text-muted-foreground">+201 since last hour</p>
+					<div class="text-2xl font-bold">{data.totalStylist} Stylist(s)</div>
+					<!-- <p class="text-xs text-muted-foreground">+201 since last hour</p> -->
 				</div>
 			</div>
 		</div>
