@@ -4,9 +4,9 @@ import { deleteTransactionById, getAllTransactionsWithPagination, getTransaction
 import { Pagination } from "$lib/server/utils/pagination";
 
 export const load: PageServerLoad = async (event) => {
-    if (!event.locals.session) {
+    if ( !event.locals.session || ( event.locals.user === null || event.locals.user?.role !== "ADMIN" ) ) {
         return redirect(302, '/');
-     }
+    }
 
     const transactionCount = await getTransactionsCount()
     const paginate = new Pagination(transactionCount)

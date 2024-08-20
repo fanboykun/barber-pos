@@ -8,19 +8,15 @@ import { addTransaction, type TransactionFormDataValidated } from '$lib/server/f
 import type { Customers, Points } from '@prisma/client'
 
 export const load = async (event) => {
-    if(!event.locals.user) {
-        return redirect(302, '/')
+    if ( !event.locals.session || ( event.locals.user === null || event.locals.user?.role !== "ADMIN" ) ) {
+        return redirect(302, '/');
     }
-    // const treatments = getAllTreatments()
-    // const points = getAllPoints()
-    // const stylists = getAllStylists()
-    // const members = getAllMembers()
+
     const creation = async () => {
         const [treatments, points, stylists] = await Promise.all([
             getAllTreatments(),
             getAllPoints(),
             getAllStylists(),
-            // getAllMembers()
         ]);
         
         return { treatments, points, stylists };

@@ -4,9 +4,10 @@ import type { PageServerLoad } from "./$types"
 import { validateAddTreatment, validateUpdateTreatment } from "./(validation)"
 
 export const load: PageServerLoad = async (event) => {
-    if (!event.locals.session) {
+    if ( !event.locals.session || ( event.locals.user === null || event.locals.user?.role !== "ADMIN" ) ) {
         return redirect(302, '/');
-     }
+    }
+
     const treatments = getAllTreatments()
     return {
         treatments

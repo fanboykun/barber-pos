@@ -5,9 +5,10 @@ import { addStylist, deleteStylistById, getAllStylists, getStylistById, updateSt
 import { Argon2id } from "oslo/password"
 
 export const load: PageServerLoad = async (event) => {
-    if (!event.locals.session) {
+    if ( !event.locals.session || ( event.locals.user === null || event.locals.user?.role !== "ADMIN" ) ) {
         return redirect(302, '/');
-     }
+    }
+
     const stylists = getAllStylists()
     return {
         stylists

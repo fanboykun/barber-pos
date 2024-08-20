@@ -6,63 +6,33 @@
     import { Html5Qrcode } from "html5-qrcode";
 
     export let isScanCustomerDialogOpen = false
-    export let onClose: Function
+    export let  onClose: Function
 
     let scannedCustomerId:string = ''
     let scanCustomerform: HTMLFormElement
     let html5QrCodeObj: Html5Qrcode
     let facingMode: 'user'|'environment' = 'user'
-
-    function beginOpenCamera() {
-        // This method will trigger user permissions
-        Html5Qrcode.getCameras().then(devices => {
-        if (devices && devices.length) {
-            var cameraId = devices[0].id;
-            setTimeout(() => {
-                beginOpenScan(cameraId)
-            }, 300)
-        }
-        }).catch(err => {
-            console.log(err)
-        });
-    }
-
-    async function beginOpenScan(cameraId: string) {
-        html5QrCodeObj = new Html5Qrcode(/* element id */ "reader");
-        const config = { fps: 10, qrbox: { width: 250, height: 250 } }; 
-        html5QrCodeObj.start(
-            cameraId, config,
-            (decodedText, decodedResult) => {
-                beginGetCustomer(decodedText)
-            },
-            (errorMessage) => {
-                // parse error, ignore it.
-                // console.log(errorMessage)
-            })
-            .catch((err) => {
-                console.log(err)
-                closeScannerDialog()
-            // Start failed, handle it.
-        });
-    }
+    let isFlipping = false
 
     async function openCameraWithFlip() {
         await setTimeout(() => {}, 300)
         if(html5QrCodeObj == undefined) { html5QrCodeObj = new Html5Qrcode(/* element id */ "reader"); }
         const config = { fps: 10, qrbox: { width: 250, height: 250 } }; 
         html5QrCodeObj.start(
-            { facingMode: facingMode }, config,
+            { facingMode: { exact: facingMode } }, config,
             (decodedText, decodedResult) => {
                 beginGetCustomer(decodedText)
-            },
-            (errorMessage) => {
-                // parse error, ignore it.
-                // console.log(errorMessage)
+            }, (errorMessage) => { })
+            .then(() => {
+                if(isFlipping) isFlipping = false
             })
             .catch((err) => {
-                console.log(err)
-                closeScannerDialog()
-            // Start failed, handle it.
+                if(isFlipping) { 
+                    facingMode = facingMode == 'user' ? 'environment' : 'user'
+                    return openCameraWithFlip()
+                } else {
+                    closeScannerDialog()
+                }
         });
     }
 
@@ -70,13 +40,18 @@
         if(html5QrCodeObj) {
             await html5QrCodeObj.stop()
             facingMode = facingMode == 'user' ? 'environment' : 'user'
+            isFlipping = true
             return openCameraWithFlip()
         }
     }
     
     async function closeScannerDialog() {
         if(html5QrCodeObj != undefined){
-            await html5QrCodeObj.stop()
+            try {
+                await html5QrCodeObj.stop()
+            } catch(err) {
+                console.log('camera is paused or stopped already')
+            }
         }
         onClose()
     }
@@ -91,14 +66,12 @@
         console.log('included customerId' ,formData.get('customerId'))
         return async ({ result }) => {
             if(result.type != "success") return
-            // console.log('result after from submit', result)
             await html5QrCodeObj.stop()
             return onClose(result.data)
         }
     }
 
 
-    // $: if(isScanCustomerDialogOpen) { beginOpenCamera() }
     $: if(isScanCustomerDialogOpen) { openCameraWithFlip() }
 </script>
 
@@ -111,7 +84,7 @@
         </Dialog.Description>
       </Dialog.Header>
       <div class="flex justify-center items-center w-full">
-          <div id="reader" class="w-full h-full {facingMode == 'user' ? 'scale-x-[-1]' : 'scale-x-[1]' } "></div>
+          <div id="reader" class="w-full h-full min-h-[250px] {facingMode == 'user' ? 'scale-x-[-1]' : 'scale-x-[1]' } "></div>
         <form action="?/getCustomer" method="post" class="hidden" bind:this={scanCustomerform} use:enhance={getCustomerFromDb}>
             <button class="hidden" type="submit">submit</button>
         </form>

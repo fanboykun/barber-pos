@@ -7,9 +7,10 @@ import { getTotalMember } from "$lib/server/functions/member";
 import { getTotalStylist } from "$lib/server/functions/stylist";
 
 export const load:PageServerLoad = async (event) => {
-    if (!event.locals.session) {
-       return redirect(302, '/');
+    if ( !event.locals.session || ( event.locals.user === null || event.locals.user?.role !== "ADMIN" ) ) {
+        return redirect(302, '/');
     }
+
     const [
         rolesWithUserCount,
         getUser,

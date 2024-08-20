@@ -1,11 +1,15 @@
 import { getAllMembers } from "$lib/server/functions/member"
-import { fail, type Actions } from "@sveltejs/kit"
+import { fail, redirect, type Actions } from "@sveltejs/kit"
 import type { PageServerLoad } from "./$types"
 import { validateAddMember, validateUpdateMember } from "./(validation)"
 import { createCustomer, deleteCustomer, getCustomerById, updateMembers } from "$lib/server/functions/customer"
 
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ( event) => {
+    if ( !event.locals.session || ( event.locals.user === null || event.locals.user?.role !== "ADMIN" ) ) {
+        return redirect(302, '/');
+    }
+
     const members = getAllMembers()
     return {
         members

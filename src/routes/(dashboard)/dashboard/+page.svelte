@@ -5,7 +5,6 @@
 	import type { PageData } from "./$types";
 
 	export let data: PageData
-	console.log(data)
 </script>
 <div class="h-full bg-gray-50">
 	<div class="px-8 pt-4 pb-2 bg-gray-50">
