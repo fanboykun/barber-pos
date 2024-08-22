@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Navigation from '$lib/components/layouts/guests/Navigation.svelte';
+	import NavigationItems from '$lib/components/layouts/guests/NavigationItems.svelte';
 	import Features from '$lib/components/pages/home/Features.svelte';
 	import Footer from '$lib/components/pages/home/Footer.svelte';
 	import Hero from '$lib/components/pages/home/Hero.svelte';
@@ -8,7 +9,9 @@
 </script>
 <div class="flex flex-col w-full justify-center items-center relative bg-gray-100 overflow-x-hidden">
 
-    <Navigation user={data.user} />
+    <Navigation>
+        <NavigationItems user={data.user} authenticated={data.isAuthenticatedUser} hasCustomerSession={data.hasCustomerSession} />
+    </Navigation>
     <Hero />
     <Features />
     <Team />

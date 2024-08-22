@@ -1,14 +1,16 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import LoadingSpinner from '$lib/components/ui/LoadingSpinner.svelte';
-	import TransactionList from '../../../(stylist)/(components)/TransactionList.svelte';
-	import PageHeading from './(components)/PageHeading.svelte';
-  export let data
+	import { goto } from "$app/navigation";
+	import LoadingSpinner from "$lib/components/ui/LoadingSpinner.svelte";
+	import TransactionList from "../../../(stylist)/(components)/TransactionList.svelte";
+	import PageHeading from "./(components)/PageHeading.svelte";
+    export let data
+
+
 </script>
 
 <section>
     <PageHeading>
-        Stylist {data.stylist.name}'s Info
+        Customer {data.customer.name}'s Info
     </PageHeading>
 
     {#await data.transactions}
@@ -54,3 +56,4 @@
     {/await}
 
 </section>
+

@@ -3,6 +3,7 @@
 	import { formatCurrency, formatDay, formatTime } from "$lib/client/utils";
 	import type { AllTransactionWithPagination } from "$lib/types";
 	import { enhance } from "$app/forms";
+	import { goto } from "$app/navigation";
 
     export let transactions: Exclude<AllTransactionWithPagination, null>
     export let form: ActionData
@@ -83,7 +84,7 @@
                 <tr>
 
 
-                  <td class="size-px whitespace-nowrap">
+                  <td class="size-px whitespace-nowrap" role="button" on:click={() => { goto(`/stylists/${transaction.stylist.id}`) } }>
                     <div class="px-6 py-3">
                       <div class="flex items-center gap-x-3">
                         <img class="inline-block size-[38px] rounded-full" src="https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80" alt="Image Description">
@@ -107,9 +108,10 @@
                   <td class="size-px whitespace-nowrap">
                     <div class="px-6 py-3">
                       {#if transaction.customer}
-                      <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full">
-                        {transaction.customer.name}
-                      </span>
+                      {@const customer = transaction.customer}
+                      <button type="button" on:click={() => { goto(`/members/${customer.id}`) } } class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full">
+                        {customer.name}
+                      </button>
                       {:else}
                       <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-red-100 text-red-600 rounded-full">
                         Guest

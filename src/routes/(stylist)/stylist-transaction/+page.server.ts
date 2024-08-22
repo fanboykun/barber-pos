@@ -9,7 +9,7 @@ export const load: PageServerLoad = async (event) => {
     }
     const stylistId = event.locals.session.userId
     const transactionCount = await getStylistTotalTransaction(stylistId)
-    const paginate = new Pagination(transactionCount)
+    const paginate = new Pagination(transactionCount, 10, event.url.pathname)
     let currentPageFromParam = Number(event.url.searchParams.get('page'))
     if(isNaN(currentPageFromParam) || currentPageFromParam == 0) { currentPageFromParam = 1 }
     paginate.move(Number(currentPageFromParam))

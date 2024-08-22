@@ -267,3 +267,53 @@ export const getTotalMember = async () => {
     }
 }
 
+export const getCustomerAllTransactionsWithPagination = async (customerId: string, skip = 0, take = 10) => {
+    try {
+        const transactions = await db.transactions.findMany({
+            orderBy: {
+                createdAt: 'desc'
+            },
+            include: {
+                customer: {
+                    select: {
+                        id: true,
+                        name: true,
+                        total_point: true,
+                        phone: true
+                    }
+                },
+                stylist: {
+                    select: {
+                        id: true,
+                        name: true,
+                        code: true,
+                        email: true
+                    }
+                },
+                point: {
+                    select: {
+                        id: true,
+                        name: true,
+                        minimum: true,
+                        discount: true
+                    }
+                },
+                transactionDetails: {
+                    include: {
+                        treatment: true
+                    }
+                },
+            },
+            skip: skip,
+            take: take,
+            where: {
+                customerId: customerId
+            }
+        })
+        return transactions
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}
+

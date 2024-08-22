@@ -45,7 +45,7 @@ export const capitalizeFirstLetter = (string: string) => {
 export function formDataToObject(formData: FormData): { [key: string]: FormDataEntryValue | FormDataEntryValue[] } {
     const obj: { [key: string]: FormDataEntryValue | FormDataEntryValue[] } = {};
 
-    formData.forEach((value, key) => {
+    formforEach((value, key) => {
         console.log(typeof value)
         // If the key already exists, convert the value to an array (if not already)
         if (key in obj) {
@@ -88,3 +88,4 @@ export const formatNumberUnit = (num: number) => {
         return num.toString(); // Less than 1,000, no formatting
     }
 }
+

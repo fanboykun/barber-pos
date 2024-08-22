@@ -5,7 +5,6 @@
     import type { ActionData } from "../stylist/$types";
 
     export let transactions: Exclude<AllTransactionWithPagination, null>
-    export let form: ActionData
 
 </script>
 

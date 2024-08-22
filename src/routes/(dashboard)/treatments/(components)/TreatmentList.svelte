@@ -43,7 +43,7 @@
  <div class="flex gap-x-2 w-full px-4 sm:px-8 py-2 rounded-md bg-gray-50">
     <Input placeholder="search treatment by name" type="search" bind:value={search} />
  </div>
-<div class="grid gap-4 px-4 sm:grid-cols-2">
+<div class="grid gap-4 px-4 sm:grid-cols-2 pb-8">
     {#each treatmentList as treatment}
         <!-- Card List -->
         <div class="relative mt-4">
