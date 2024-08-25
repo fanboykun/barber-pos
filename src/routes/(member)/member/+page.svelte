@@ -4,6 +4,10 @@
 	import Badge from '$lib/components/ui/badge/badge.svelte';
 
     export let data
+
+	const member = data.customer
+
+	console.log(member)
 </script>
 <div class="h-full bg-gray-50">
 	<div class="px-8 pt-4 pb-2 bg-gray-50">
@@ -34,8 +38,8 @@
 					>
 				</div>
 				<div class="p-6 pt-0">
-					<div class="text-2xl font-bold">$45,231.89</div>
-					<p class="text-xs text-muted-foreground">+20.1% from last month</p>
+					<div class="text-2xl font-bold">{member?.total_point} Point</div>
+					<p class="text-xs text-muted-foreground">Reedem your point to get FREE STYLIST!</p>
 				</div>
 			</div>
 			<div class="rounded-xl border bg-card text-card-foreground shadow">

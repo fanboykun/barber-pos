@@ -6,4 +6,6 @@ export const load: PageServerLoad =  async(event) => {
     if (!event.locals.customer) {
         redirect(302, '/sign-in');
     }
+
+
 }
