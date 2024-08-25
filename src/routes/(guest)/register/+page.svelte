@@ -5,9 +5,21 @@
 	  import InputError from "$lib/components/ui/InputError.svelte";
     import type { PageData, ActionData } from './$types';
 	  import { enhance } from "$app/forms";
+	import { toast } from "svelte-sonner";
 
 	  // export let data: PageData;
     export let form: ActionData;
+
+    $: {
+      if(form?.success) {
+          let isSuccess = form?.success == true
+          let toastMessage = isSuccess ? 'The Action Executed Successfully' : 'The Action Failed to Execute'
+          if(form.message && typeof form.message === 'string') toastMessage = form.message
+          toast(isSuccess ? 'Success' : 'Failed', {
+              description: toastMessage,
+          })
+      }
+  }
 
   </script>
   

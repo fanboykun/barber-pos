@@ -148,9 +148,9 @@
                   
                   <td class="size-px whitespace-nowrap">
                     <div class="px-6 py-1.5 flex gap-x-2">
-                      <button type="button" class="flex text-sm p-2 bg-blue-100 rounded-xl text-blue-600 decoration-2 hover:underline font-medium dark:text-blue-500" >
+                      <a href={`/transactions/${transaction.id}`} class="flex text-sm p-2 bg-blue-100 rounded-xl text-blue-600 decoration-2 hover:underline font-medium dark:text-blue-500" >
                         Edit
-                      </button>
+                      </a>
                       <form action="?/deleteTransaction" method="post" use:enhance>
                         <input type="hidden" name="transactionId" id="transactionId" value={transaction.id}>
                         <button type="submit" class="text-sm p-2 bg-red-100 rounded-xl text-red-600 decoration-2 hover:underline font-medium flex items-center justify-center" >

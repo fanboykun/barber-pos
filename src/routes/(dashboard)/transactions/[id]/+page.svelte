@@ -9,10 +9,10 @@
   import Button from "$lib/components/ui/button/button.svelte";
   import { enhance } from "$app/forms";
 	import { createGradientAvatar } from "$lib/client/utils";
-	import SelectStylist from './(components)/SelectStylist.svelte';
-	import SelectTreatments from './(components)/SelectTreatments.svelte';
-	import SelectCustomer from './(components)/SelectCustomer.svelte';
-	import SelectDiscount from './(components)/SelectDiscount.svelte';
+	import SelectStylist from '../create/(components)/SelectStylist.svelte';
+	import SelectTreatments from '../create/(components)/SelectTreatments.svelte';
+	import SelectCustomer from '../create/(components)/SelectCustomer.svelte';
+	import SelectDiscount from '../create/(components)/SelectDiscount.svelte';
 	import type { SubmitFunction } from "@sveltejs/kit";
 	import { goto } from "$app/navigation";
 	import { toast } from "svelte-sonner";
@@ -85,7 +85,7 @@
     totalPrice = normalPrice - totalDiscount
   }
 
-  const handleCreateTransaction: SubmitFunction = ( { formData, cancel } ) => {
+  const handleUpdateTransaction: SubmitFunction = ( { formData, cancel } ) => {
     if(selectedStylist == null && selectedTreatment == null && normalPrice == 0 && totalPrice == 0) { return cancel() } 
     if(selectedStylist != null) {
       formData.append('stylistId', selectedStylist.id as string)
@@ -103,6 +103,7 @@
     formData.append('normalPrice', normalPrice as unknown as string)
     formData.append('totalDiscount', totalDiscount as unknown as string)
     formData.append('totalPrice', totalPrice as unknown as string)
+    formData.append('transactionId', data.transaction.id)
 
     return async ( {result} ) => {
       if(result.type == "error" || result.type == "failure" ) {
@@ -124,7 +125,7 @@
 
 <div class="flex flex-col gap-2 sm:gap-0 sm:flex-row sm:justify-between px-4 sm:px-8 pt-4 pb-2 bg-gray-50">
   <div>
-      <h3 class="text-lg font-medium">Add New Transaction</h3> 
+      <h3 class="text-lg font-bold underline">Edit Transaction</h3> 
       <p class="text-sm text-muted-foreground">Fill the form to add new transaction</p>
   </div>
 </div>
@@ -137,14 +138,14 @@
             <div class="w-full">
                 <div class="flex flex-col items-center space-y-4 w-full">
                   {#if all.stylists}
-                    <SelectStylist stylists={all.stylists} {setStylist} />
+                    <SelectStylist stylists={all.stylists} {setStylist} stylist={data.transaction.stylist} />
                   {/if}
                   {#if all.treatments}
-                    <SelectTreatments treatments={all.treatments} {setTreatment}/>
+                    <SelectTreatments treatments={all.treatments} {setTreatment} treatment={data.transaction.transactionDetails[0]?.treatment} />
                   {/if}
-                  <SelectCustomer {setCustomer} />
+                  <SelectCustomer {setCustomer} customer={data.transaction.customer ?? undefined} />
                    {#if all.points}
-                    <SelectDiscount points={all.points} {currentPoint} {setDiscount} {selectedPoint} />
+                    <SelectDiscount points={all.points} {currentPoint} {setDiscount} {selectedPoint} point={data.transaction.point ?? undefined} />
                    {/if}
                 </div>
             </div>
@@ -239,7 +240,7 @@
           </div>
 
           <div class="w-full">
-            <form action="?/createTransaction" method="post" use:enhance={handleCreateTransaction}>
+            <form action="?/updateTransaction" method="post" use:enhance={handleUpdateTransaction}>
               <Button class="w-full disabled:cursor-not-allowed" type="submit" disabled={!isTransactionSubmitable} >Submit</Button>
             </form>
           </div>

@@ -7,10 +7,12 @@
     export let form
     
     $: {
-        if(form?.success) {
+        if(form?.success != undefined) {
             let isSuccess = form?.success == true
+            let toastMessage = isSuccess ? 'The Action Executed Successfully' : 'The Action Failed to Execute'
+            if(form.message && typeof form.message === 'string') toastMessage = form.message
             toast(isSuccess ? 'Success' : 'Failed', {
-                description: isSuccess ? "The Action Executed Successfully" : "The Action Failed to Execute",
+                description: toastMessage,
             })
         }
     }

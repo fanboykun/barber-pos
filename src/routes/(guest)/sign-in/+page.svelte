@@ -4,8 +4,20 @@
     import { Button } from "$lib/components/ui/button";
     import { enhance } from "$app/forms";
 	import InputError from "$lib/components/ui/InputError.svelte";
+	import { toast } from "svelte-sonner";
 
     export let form
+
+    $: {
+      if(form?.success) {
+          let isSuccess = form?.success == true
+          let toastMessage = isSuccess ? 'The Action Executed Successfully' : 'The Action Failed to Execute'
+          if(form.message && typeof form.message === 'string') toastMessage = form.message
+          toast(isSuccess ? 'Success' : 'Failed', {
+              description: toastMessage,
+          })
+      }
+  }
 </script>
 
 <div class="max-w-screen-sm w-full bg-white rounded-xl p-8 flex flex-col items-center justify-center shadow-lg">

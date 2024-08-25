@@ -1,4 +1,3 @@
-import type { transactionDetails } from "@prisma/client"
 import db from "../utils/prisma"
 
 export type TransactionFormDataValidated = {
@@ -104,7 +103,9 @@ export const getTransactionById = async(id: string) => {
                 customer: true,
                 stylist: true,
                 point: true,
-                transactionDetails: true,
+                transactionDetails: {
+                    include: { treatment: true }
+                },
             }
         })
         return transaction
@@ -128,31 +129,6 @@ export const deleteTransactionById = async(id: string) => {
     }
 }
 
-export const addTransactionForMultipleTreatment = async( treatmentId: string[], customerId: string, pointId: string|null, stylistId: string, totalDiscount:number|null, totalPrice:number, totalPoint:number   ) => {
-    try{
-        const transaction = await db.transactions.create({
-            data: {
-                customerId: customerId,
-                pointId: pointId,
-                stylistId: stylistId,
-                totalDiscount: totalDiscount,
-                totalPrice: totalPrice,
-                totalPoint: totalPoint
-            }
-        })
-        const transactionDetails: Array<transactionDetails|null> = []
-        for(let a = 0; a < treatmentId.length; a++) {
-            const currentTreatmentId = treatmentId[a]
-            const transactionDetail = await addTransactionDetail(transaction.id, currentTreatmentId)
-            transactionDetails.push(transactionDetail)
-        }
-        const fullTransaction = {transaction, transactionDetails}
-        return fullTransaction
-    } catch(err) {
-        console.log(err)
-        return null
-    }
-}
 
 export const addTransaction = async ( data: TransactionFormDataValidated ) => {
     try {
@@ -163,39 +139,55 @@ export const addTransaction = async ( data: TransactionFormDataValidated ) => {
                 pointId: data.pointId,
                 totalDiscount: data.totalDiscount,
                 totalPrice: data.totalPrice,
-                totalPoint: data.totalPoint
+                totalPoint: data.totalPoint,
+                transactionDetails: {
+                    create: {
+                        treatmentId: data.treatmentId
+                    }
+                }
             }
         })
         if(!transaction) return null
-        const detail = await db.transactionDetails.create({
+        return transaction
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}
+
+export const updateTransaction = async ( data: TransactionFormDataValidated  & { transactionId: string } ) => {
+    try {
+        const transaction = await db.transactions.update({
             data: {
-                transactionId: transaction.id,
-                treatmentId: data.treatmentId
+                stylistId: data.stylistId,
+                customerId: data.customerId,
+                pointId: data.pointId,
+                totalDiscount: data.totalDiscount,
+                totalPrice: data.totalPrice,
+                totalPoint: data.totalPoint,
+            },
+            where: { id: data.transactionId },
+            include: {
+                // transactionDetails: { include: { treatment: true } },
+                customer: true,
+                point: true
             }
         })
-        return { transaction, detail }
+        if(!transaction) return null
+        return transaction
     } catch(err) {
         console.log(err)
         return null
     }
 }
 
-export const updateTreatments = async(  ) => {
+export const updateTransactionDetailTreatment = async (id: string, treatmentId: string) => {
     try{
-        return true
-    } catch(err) {
-        console.log(err)
-        return null
-    }
-}
-
-const addTransactionDetail = async (treatmentId: string, transactionId: string) => {
-    try{
-        const transactionDetail = await db.transactionDetails.create({
+        const transactionDetail = await db.transactionDetails.update({
             data: {
                 treatmentId: treatmentId,
-                transactionId: transactionId
-            }
+            },
+            where: { id: id }
         })
         return transactionDetail
     } catch(err) {

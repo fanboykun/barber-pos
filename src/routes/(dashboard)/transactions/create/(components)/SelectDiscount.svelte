@@ -6,8 +6,14 @@ import Label from "$lib/components/ui/label/label.svelte";
   export let points: Points[]
   export let currentPoint: number = 0
   export let setDiscount: Function
+  export let point: Points | undefined = undefined
 
   export let selectedPoint: Points|null
+
+  if(point) {
+    selectedPoint = point
+    setDiscount(selectedPoint)
+  }
 </script>
 
 <div class="grid w-full  items-center gap-1.5">

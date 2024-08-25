@@ -1,12 +1,17 @@
 <script lang="ts">
 	import Input from "$lib/components/ui/input/input.svelte";
 	import Label from "$lib/components/ui/label/label.svelte";
-	import type { Treatments } from "@prisma/client";
+	import type { transactionDetails, Treatments } from "@prisma/client";
 
     export let treatments: Treatments[]
     export let setTreatment: Function
-
+    export let treatment: Treatments | undefined = undefined
+    
     let selectedTreatment: Treatments
+    if(treatment) {
+      selectedTreatment = treatment     
+      setTreatment(selectedTreatment)
+    }
 </script>
 <div class="grid w-full  items-center gap-1.5">
     <Label for="name">Treatment</Label>
