@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { formatCurrency, formatDay, formatTime } from "$lib/client/utils";
+    import { createGradientAvatar, formatCurrency, formatDay, formatTime } from "$lib/client/utils";
     import type { AllTransactionWithPagination } from "$lib/types";
     import { enhance } from "$app/forms";
     import type { ActionData } from "../stylist/$types";
@@ -82,7 +82,7 @@
                   <td class="size-px whitespace-nowrap">
                     <div class="px-6 py-3">
                       <div class="flex items-center gap-x-3">
-                        <img class="inline-block size-[38px] rounded-full" src="https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80" alt="Image Description">
+                        <img class="inline-block size-[38px] rounded-full" src="{createGradientAvatar()}" alt="Description">
                         <div class="grow">
                           <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{transaction.stylist.name}</span>
                           <span class="block text-sm text-gray-500 ">{transaction.stylist?.code ?? ''}</span>
