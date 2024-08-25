@@ -4,35 +4,52 @@
     import { Button } from "$lib/components/ui/button";
     import { enhance } from "$app/forms";
 	import InputError from "$lib/components/ui/InputError.svelte";
+    import * as Card from "$lib/components/ui/card/index.js";
 
     export let form
 </script>
 
-<div class="max-w-screen-sm w-full bg-white rounded-xl p-8 flex flex-col items-center justify-center shadow-lg">
-    <h2 class="text-xl py-4 font-semibold">Login Member</h2>
-    <form class="w-full" method="POST" action="?/login" use:enhance>
-        <div class="flex flex-col items-center space-y-4 w-full">
-            <div class="grid w-full max-w-sm items-center gap-1.5">
-                <Label for="email">Phone</Label>
-                <Input type="number" id="phone" name="phone" placeholder="Phone Number" autocomplete="phone" />
-                {#if form?.errors?.phone?.valid === false}
+<div class="flex min-h-[50dvh] flex-col items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-md w-full space-y-8">
+      <div class="flex flex-col items-center justify-center space-y-2">
+        <h1 class="text-3xl font-bold tracking-tight text-foreground">Member Barbershop Your Own</h1>
+        <p class="text-muted-foreground">Experience the finest haircuts in town.</p>
+      </div>
+      <Card.Root>
+        <Card.Header class="space-y-4">
+          <form class="space-y-4" method="POST" action="?/login" use:enhance>
+            <div class="space-y-2">
+              <Label>Number</Label>
+              <Input type="number" id="phone" name="phone" placeholder="Phone Number" autocomplete="phone" />
+              {#if form?.errors?.phone?.valid === false}
                     <InputError messages={form?.errors?.phone?.message} />
                 {/if}
             </div>
-            <div class="grid w-full max-w-sm items-center gap-1.5">
-                <Label for="password">Password</Label>
-                <Input type="password" id="password" name="password" placeholder="Password" autocomplete="password" />
+            <div class="space-y-2">
+              <Label>Password</Label>
+              <Input type="password" id="password" name="password" placeholder="Password" autocomplete="password" />
                 {#if form?.errors?.password?.valid === false}
                     <InputError messages={form?.errors?.password?.message} />
                 {/if}
             </div>
             <InputError messages={form?.message} />
-            <div class="flex justify-between items-center w-full max-w-sm">
-                <div class="flex flex-col">
-                    <a href="/register" class="text-sm text-slate-600">Haven't registered? Register Instead</a>
-                </div>
-                <Button type="submit">Login Member</Button>
-            </div>
-        </div>
-    </form>
+            <Button type="submit" class="w-full">Login Member</Button>
+          </form>
+        </Card.Header>
+        <Card.Footer class="flex flex-col items-center gap-2 text-sm text-muted-foreground">
+          <div>
+            Don't have an account?{" "}
+            <a href="/register" class="underline">
+              Register Here!
+            </a>
+          </div>
+          <div>
+            By signing in, you agree to our{" "}
+            <a href="/" class="underline">
+              Terms of Service
+            </a>
+          </div>
+        </Card.Footer>
+      </Card.Root>
+    </div>
 </div>
