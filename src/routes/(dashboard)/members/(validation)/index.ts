@@ -18,3 +18,11 @@ export const validateUpdateMember = ( id:string, name: string|null, phone: strin
     ]
     return Validator.validate(validationInput)
 }
+
+export const validateUpdateMemberPassword = ( id:string, password: string|null): finalValidationResult => {
+    const validationInput: validateType[] = [
+        { data: id, key: 'id', rules: ['required', 'string', 'uuid'] },
+        { data: password, key: 'password', rules: ['required', 'string', 'min:0'] },
+    ]
+    return Validator.validate(validationInput)
+}

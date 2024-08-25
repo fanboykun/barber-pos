@@ -3,8 +3,8 @@
     import { Label } from "$lib/components/ui/label/index.js";
     import { Button } from "$lib/components/ui/button";
     import { enhance } from "$app/forms";
-	import InputError from "$lib/components/ui/InputError.svelte";
-	import { toast } from "svelte-sonner";
+	  import InputError from "$lib/components/ui/InputError.svelte";
+	  import { toast } from "svelte-sonner";
 
     export let form
 
@@ -20,31 +20,44 @@
   }
 </script>
 
-<div class="max-w-screen-sm w-full bg-white rounded-xl p-8 flex flex-col items-center justify-center shadow-lg">
-    <h2 class="text-xl py-4 font-semibold">Login To Your Account</h2>
-    <form class="w-full" method="POST" action="?/login" use:enhance>
-        <div class="flex flex-col items-center space-y-4 w-full">
-            <div class="grid w-full max-w-sm items-center gap-1.5">
-                <Label for="email">Email</Label>
-                <Input type="email" id="email" name="email" placeholder="Email" autocomplete="email" />
-                {#if form?.errors?.email?.valid === false}
-                    <InputError messages={form?.errors?.email?.message} />
-                {/if}
-            </div>
-            <div class="grid w-full max-w-sm items-center gap-1.5">
-                <Label for="password">Password</Label>
-                <Input type="password" id="password" name="password" placeholder="Password" autocomplete="password" />
-                {#if form?.errors?.password?.valid === false}
-                    <InputError messages={form?.errors?.password?.message} />
-                {/if}
-            </div>
-            <InputError messages={form?.message} />
-            <div class="flex justify-between items-center w-full max-w-sm">
-                <!-- <div class="flex flex-col">
-                    <a href="/register" class="text-sm text-slate-600">Haven't registered? Register Instead</a>
-                </div> -->
-                <Button type="submit">Login</Button>
-            </div>
+<div class="flex min-h-screen w-full items-center justify-center bg-background">
+  <div class="grid w-full max-w-[1000px] grid-cols-1 gap-10 rounded-lg border bg-card md:grid-cols-2">
+    <div class="flex flex-col items-center justify-center gap-6 p-8">
+      <div class="space-y-2 text-center">
+        <h1 class="text-3xl font-bold">Welcome to Barber's Your Own</h1>
+        <p class="text-muted-foreground">
+          Sign in to access your account
+        </p>
+      </div>
+      <form method="POST" action="?/login" class="grid w-full max-w-[350px] gap-4" use:enhance>
+        <div class="space-y-2">
+          <Label>Email</Label>
+          <Input type="email" id="email" name="email" placeholder="Enter your email" required aria-describedby="email-error"/>
+            {#if form?.errors?.email?.valid === false}
+                <InputError messages={form?.errors?.email?.message} />
+            {/if}
+          </div>
+          <div class="space-y-2">
+            <Label>Password</Label>
+            <Input type="password" id="password" name="password" placeholder="Enter your password" required aria-describedby="password-error"/>
+            {#if form?.errors?.password?.valid === false}
+                <InputError messages={form?.errors?.password?.message} />
+            {/if}
         </div>
-    </form>
+        <InputError messages={form?.message} />
+        <Button type="submit" class="w-full">
+          Login
+        </Button>
+      </form>
+    </div>
+    <div class="hidden rounded-r-lg bg-muted md:block">
+      <img
+        src="assets/img/pplanding.webp"
+        alt="Barbershop Interior"
+        width={500}
+        height={500}
+        class="h-full w-full rounded-r-lg object-cover"
+      />
+    </div>
+  </div>
 </div>

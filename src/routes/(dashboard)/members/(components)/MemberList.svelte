@@ -18,13 +18,16 @@
 	let isAlertDeleteOpen = false;
 	let selectedMember: Customers | null = null;
     let search = ''
+    let isEditPasswordDialogOpen = false
 
 	const changeDialogState = (
 		dialog: 'form' | 'delete',
 		state: boolean,
-		member: Customers | null = null
+		member: Customers | null = null,
+        isEditPassword = false
 	) => {
 		selectedMember = member;
+        isEditPasswordDialogOpen = isEditPassword
 		if (dialog == 'form') {
 			isOpen = state;
 		} else if (dialog == 'delete') {
@@ -79,6 +82,9 @@
                             <DropdownMenu.Item>
                                 <Button type="button" class="w-full" variant="destructive" on:click={() => changeDialogState("delete", true, member)}>Delete</Button>
                             </DropdownMenu.Item>
+                            <DropdownMenu.Item>
+                                <Button type="button" class="w-full bg-green-400 hover:bg-green-310 text-white" on:click={() => changeDialogState("form", true, member, true)}>Update Password</Button>
+                            </DropdownMenu.Item>
                         </DropdownMenu.Content>
                     </DropdownMenu.Root>
                 </div>
@@ -97,7 +103,7 @@
             {/each}
         </div>    
 
-<AddMember {isOpen} member={selectedMember} {form} onClose={() => changeDialogState("form", false)} formAction={"?/editMember"} />
+<AddMember {isOpen} member={selectedMember} {form} onClose={() => changeDialogState("form", false, null, false)} formAction={isEditPasswordDialogOpen ? "?/updateMemberPassword" : "?/editMember"} />
 
 <AlertDialog.Root open={isAlertDeleteOpen} onOpenChange={() => changeDialogState('delete', false)}>
 	<AlertDialog.Content>

@@ -82,6 +82,23 @@ export const updateMembers = async( id: string, name: string, phone: string, pas
     }
 }
 
+export const updateMemberPassword = async( id: string, password: string ) => {
+    try{
+        const hashed_password = await new Argon2id().hash(password);
+        const updatedCustomer = await db.customers.update({
+            where: {
+                id: id
+            },
+            data: {
+                password: hashed_password
+            }
+        })
+        return updatedCustomer
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}
 
 export const deleteCustomer = async (id: string): Promise<Customers | null> => {
 
