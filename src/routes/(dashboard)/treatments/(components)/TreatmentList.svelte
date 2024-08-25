@@ -40,16 +40,15 @@
 
 </script>
  <!-- Search -->
- <div class="flex gap-x-2 w-full px-8 py-2 rounded-md bg-gray-50">
+ <div class="flex gap-x-2 w-full px-4 sm:px-8 py-2 rounded-md bg-gray-50">
     <Input placeholder="search treatment by name" type="search" bind:value={search} />
  </div>
-<div class="grid gap-4 p-4 sm:grid-cols-2">
+<div class="grid gap-4 px-4 sm:grid-cols-2 pb-8">
     {#each treatmentList as treatment}
         <!-- Card List -->
-        <div class="relative">
-            
-
-            <div class="bg-gray-50 p-4 mt-4 transition duration-300 rounded-lg hover:bg-gray-100 border-2 border-gray-200">
+        <div class="relative mt-4">
+        
+            <div class="bg-white h-full p-4 mt-4 transition duration-300 rounded-lg shadow border-t hover:bg-gray-50 hover:shadow-md ">
                 <div class="flex">
                 <div class="mt-1.5 flex justify-center flex-shrink-0 rounded-s-xl">
                     <svg class="size-5 text-gray-800" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -61,7 +60,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M12 17.25h8.25" />
                     </svg>          
                 </Button>
-                <div class="grow ms-6">
+                <div class="grow ms-2 md:ms-4 lg:ms-6">
                     <h3 class="text-sm font-semibold text-blue-600 ">
                     {treatment.name}
                     </h3>
@@ -85,7 +84,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-lime-600">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
                             </svg>                  
-                        {treatment.price.toLocaleString("id-ID", { style: 'currency', currency: 'IDR' })}
+                        {treatment.price.toLocaleString("id-ID", { style: 'currency', currency: 'IDR' }).split(',').at(0)}
                         </p>
                         <p class="flex items-center gap-x-1 mt-1 text-sm text-gray-600 font-semibold">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-pink-500">

@@ -1,12 +1,15 @@
 import { getAllMembers } from "$lib/server/functions/member"
-import { fail, type Action, type Actions } from "@sveltejs/kit"
+import { fail, redirect, type Actions } from "@sveltejs/kit"
 import type { PageServerLoad } from "./$types"
 import { validateAddMember, validateUpdateMember } from "./(validation)"
 import { createCustomer, deleteCustomer, getCustomerById, updateMembers } from "$lib/server/functions/customer"
-import { get } from "http"
 
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ( event) => {
+    if ( !event.locals.session || ( event.locals.user === null || event.locals.user?.role !== "ADMIN" ) ) {
+        return redirect(302, '/');
+    }
+
     const members = getAllMembers()
     return {
         members
@@ -71,11 +74,11 @@ export const actions: Actions = {
         const existingCustomer = await getCustomerById(id)
         if(!existingCustomer) return fail(401, { message: 'Member Not Found!', success: false })
 
-        const updatedPoint = await updateMembers(id, name, phone, password)
+        const updatedCustomer = await updateMembers(id, name, phone, password)
     
         return {
             success: true,
-            data: updatedPoint
+            data: updatedCustomer
         } 
 
     }

@@ -5,9 +5,10 @@ import { updateUserProfilePasswordValidation, updateUserProfileValidation } from
 import { lucia } from "$lib/server/utils/auth";
 
 export const load:PageServerLoad = async (event) => {
-    if (!event.locals.user) {
+    if ( !event.locals.session || ( event.locals.user === null || event.locals.user?.role !== "ADMIN" ) ) {
         return redirect(302, '/');
     }
+
     const authUser = await findUserById(event.locals.user.id)
     return {
         authUser: authUser

@@ -11,7 +11,7 @@
     <TopNavigation user={data.user} />
 
     <section class="flex h-full min-h-[calc(100svh-200px)] max-h-full">
-            <div class="flex flex-row overflow-x-hidden w-full h-full">
+            <div class="flex flex-row w-full h-full">
 
                 <div class="hidden md:flex">
                       
@@ -20,7 +20,7 @@
 
                 </div>
 
-                <section id="content" class="w-full">
+                <section id="content" class="w-full h-full">
                     <slot />
                 </section>
 

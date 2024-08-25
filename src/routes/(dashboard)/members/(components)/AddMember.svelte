@@ -1,5 +1,5 @@
 <script lang="ts">
-        import * as Dialog from "$lib/components/ui/dialog";
+      import * as Dialog from "$lib/components/ui/dialog";
       import Label from "$lib/components/ui/label/label.svelte";
       import Input from "$lib/components/ui/input/input.svelte";
       import Button from "$lib/components/ui/button/button.svelte";
@@ -8,8 +8,8 @@
       import type { ActionData } from "../$types";
       import InputError from "$lib/components/ui/InputError.svelte";
   
-      export let isOpen: boolean
-      export let onClose: CallableFunction
+    export let isOpen: boolean
+    export let onClose: CallableFunction
     export let form: ActionData
     export let formAction: string = '?/createMember'
     export let member: Customers|null = null
@@ -49,7 +49,7 @@
                 </div>
                 <div class="grid grid-cols-4 items-center gap-4">
                   <Label for="password" class="text-right">Password</Label>
-                  <Input id="password" name="password" value={member?.password} type="password" min="0" class="col-span-3" />
+                  <Input id="password" name="password" type="password" min="0" class="col-span-3" />
                   <div class="col-span-4">
                     {#if form?.errors?.password?.valid === false}
                       <InputError messages={form?.errors?.password?.message} />

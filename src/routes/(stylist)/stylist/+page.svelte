@@ -1,6 +1,4 @@
 <script lang="ts">
-	import TodayTransaction from '../(components)/TodayTransaction.svelte';
-
     export let data
 </script>
 
@@ -12,7 +10,7 @@
 
 	<!-- Example of a dashboard card stats -->
 	<div class="px-4 py-2 ">
-		<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+		<div class="grid gap-4 md:grid-cols-2">
 			<div class="rounded-xl border bg-card text-card-foreground shadow">
 				<div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
 					<h3 class="tracking-tight text-sm font-medium">Total Revenue</h3>
@@ -33,13 +31,13 @@
 					>
 				</div>
 				<div class="p-6 pt-0">
-					<div class="text-2xl font-bold">$45,231.89</div>
+					<div class="text-2xl font-bold">{data.totalRevenue?._sum.totalPrice?.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }).split(',').at(0)}</div>
 					<p class="text-xs text-muted-foreground">+20.1% from last month</p>
 				</div>
 			</div>
 			<div class="rounded-xl border bg-card text-card-foreground shadow">
 				<div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
-					<h3 class="tracking-tight text-sm font-medium">Subscriptions</h3>
+					<h3 class="tracking-tight text-sm font-medium">Total Transactions</h3>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="24"
@@ -57,63 +55,12 @@
 					>
 				</div>
 				<div class="p-6 pt-0">
-					<div class="text-2xl font-bold">+2350</div>
+					<div class="text-2xl font-bold">{data.totalTransaction} Time(s)</div>
 					<p class="text-xs text-muted-foreground">+180.1% from last month</p>
-				</div>
-			</div>
-			<div class="rounded-xl border bg-card text-card-foreground shadow">
-				<div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
-					<h3 class="tracking-tight text-sm font-medium">Sales</h3>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="lucide-icon lucide lucide-credit-card h-4 w-4 text-muted-foreground"
-						><rect width="20" height="14" x="2" y="5" rx="2"></rect><line
-							x1="2"
-							x2="22"
-							y1="10"
-							y2="10"
-						></line></svg
-					>
-				</div>
-				<div class="p-6 pt-0">
-					<div class="text-2xl font-bold">+12,234</div>
-					<p class="text-xs text-muted-foreground">+19% from last month</p>
-				</div>
-			</div>
-			<div class="rounded-xl border bg-card text-card-foreground shadow">
-				<div class="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
-					<h3 class="tracking-tight text-sm font-medium">Active Now</h3>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="lucide-icon lucide lucide-activity h-4 w-4 text-muted-foreground"
-						><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg
-					>
-				</div>
-				<div class="p-6 pt-0">
-					<div class="text-2xl font-bold">+573</div>
-					<p class="text-xs text-muted-foreground">+201 since last hour</p>
 				</div>
 			</div>
 		</div>
 	</div>
-
-	<TodayTransaction />
 
 
 </div>

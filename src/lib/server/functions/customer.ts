@@ -64,6 +64,7 @@ export const findCustomerByPhone = async(phone: string|number) : Promise<Custome
 
 export const updateMembers = async( id: string, name: string, phone: string, password: string ) => {
     try{
+        const hashed_password = await new Argon2id().hash(password);
         const updatedCustomer = await db.customers.update({
             where: {
                 id: id
@@ -71,7 +72,7 @@ export const updateMembers = async( id: string, name: string, phone: string, pas
             data: {
                 name: name,
                 phone: phone,
-                password: password
+                password: hashed_password
             }
         })
         return updatedCustomer

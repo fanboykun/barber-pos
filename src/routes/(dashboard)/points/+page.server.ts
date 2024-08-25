@@ -1,9 +1,13 @@
 import { addPoint, deletePointById, getAllPoints, getPointById, updatePoint } from "$lib/server/functions/point";
-import { fail, type Action, type Actions } from "@sveltejs/kit";
+import { fail, redirect, type Action, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { validateAddPoint, validateEditPoint } from "./(validation)";
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async (event) => {
+    if ( !event.locals.session || ( event.locals.user === null || event.locals.user?.role !== "ADMIN" ) ) {
+        return redirect(302, '/');
+    }
+
     const points = getAllPoints()
     return {
         points
@@ -16,7 +20,7 @@ const createPoint: Action = async( { request } ) => {
     const [failed, result] = validateAddPoint(name, minimum, discount)
     if(failed) return fail(401, { errors: result, success: false })
 
-    const newPoint = await addPoint(name, minimum, discount)
+    const newPoint = await addPoint(name.trim(), minimum, discount)
     return {
         success: true,
         data: newPoint
@@ -33,7 +37,7 @@ const editPoint: Action = async( { request } ) => {
     const existingPoint = getPointById(id)
     if(!existingPoint) return fail(401, { message: 'Point Not Found!', success: false })
         
-    const updatedPoint = await updatePoint(id, name, minimum, discount)
+    const updatedPoint = await updatePoint(id.trim(), name.trim(), minimum, discount)
     return {
         success: true,
         data: updatedPoint
@@ -44,12 +48,12 @@ const deletePoint: Action = async( { request } ) => {
     const formData = await request.formData()
 
     const id = String(formData.get('id'))
-    if(!id) return fail(401, { message: 'Point Not Found!', success: false })
+    if(id === 'undefined' || id === 'null' || id == null) return fail(401, { message: 'Point Not Found!', success: false })
 
-    const existingPoint = getPointById(id)
+    const existingPoint = getPointById(id.trim())
     if(!existingPoint) return fail(401, { message: 'Point Not Found!', success: false })
 
-    const isPointDeleted = await deletePointById(id)
+    const isPointDeleted = await deletePointById(id.trim())
     if(!isPointDeleted) return fail(401, { message: 'Failed To Delete Point', success: false })
 
     return {

@@ -58,6 +58,9 @@ dependencies:
     version: 3.23.4
 
 devDependencies:
+  '@castlenine/svelte-qrcode':
+    specifier: ^2.2.0
+    version: 2.2.0(svelte@4.2.15)
   '@playwright/test':
     specifier: ^1.43.1
     version: 1.43.1
@@ -97,6 +100,9 @@ devDependencies:
   eslint-plugin-svelte:
     specifier: ^2.38.0
     version: 2.38.0(eslint@8.57.0)(svelte@4.2.15)(ts-node@10.9.2)
+  html5-qrcode:
+    specifier: ^2.3.8
+    version: 2.3.8
   lucia:
     specifier: ^3.2.0
     version: 3.2.0
@@ -161,6 +167,14 @@ packages:
     dependencies:
       regenerator-runtime: 0.14.1
     dev: false
+
+  /@castlenine/svelte-qrcode@2.2.0(svelte@4.2.15):
+    resolution: {integrity: sha512-0PbzjH86AQOPFomHD7FDxSzWlQC8MOfyvOfHS0kmRXNA2nz5+oOL9kjpE+7IywejCGIXFN3sZrBpvx9i6xsdeA==}
+    peerDependencies:
+      svelte: '>=3.54.0'
+    dependencies:
+      svelte: 4.2.15
+    dev: true
 
   /@cspotcode/source-map-support@0.8.1:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -2237,6 +2251,10 @@ packages:
     engines: {node: '>= 0.4'}
     dependencies:
       function-bind: 1.1.2
+
+  /html5-qrcode@2.3.8:
+    resolution: {integrity: sha512-jsr4vafJhwoLVEDW3n1KvPnCCXWaQfRng0/EEYk1vNcQGcG/htAdhJX0be8YyqMoSz7+hZvOZSTAepsabiuhiQ==}
+    dev: true
 
   /human-signals@5.0.0:
     resolution: {integrity: sha512-AXcZb6vzzrFAUE61HnN4mpLqd/cSIwNQjtNWR0euPm6y0iqx3G4gOXaIDdtdDwZmhwe82LA6+zinmW4UBWVePQ==}
