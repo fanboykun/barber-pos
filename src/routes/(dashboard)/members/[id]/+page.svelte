@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
-	import LoadingSpinner from "$lib/components/ui/LoadingSpinner.svelte";
-	import TransactionList from "../../../(stylist)/(components)/TransactionList.svelte";
-	import PageHeading from "./(components)/PageHeading.svelte";
-    export let data
+  import { goto } from "$app/navigation";
+  import LoadingSpinner from "$lib/components/ui/LoadingSpinner.svelte";
+  import TransactionList from "../../../(stylist)/(components)/TransactionList.svelte";
+  import PageHeading from "./(components)/PageHeading.svelte";
+  export let data
 
 
 </script>

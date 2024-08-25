@@ -12,12 +12,18 @@
 	import ScanQr from "./ScanQr.svelte";
 
     export let setCustomer: Function
+    export let customer: Customers | undefined = undefined
 
     let customers: Customers[]|null
     let customersCount = 0
     let selectedCustomer: Customers|null
     let isSearchCustomerDialogOpen = false
     let isScanCustomerDialogOpen = false
+
+    if(customer) {
+        selectedCustomer = customer
+        setCustomer(selectedCustomer)
+    }
 
     const getCustomers: SubmitFunction = ({ formData }) => {
         return async ({ result }) => {

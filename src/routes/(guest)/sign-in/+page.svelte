@@ -3,10 +3,22 @@
     import { Label } from "$lib/components/ui/label/index.js";
     import { Button } from "$lib/components/ui/button";
     import { enhance } from "$app/forms";
-	import InputError from "$lib/components/ui/InputError.svelte";
+  	import InputError from "$lib/components/ui/InputError.svelte";
     import * as Card from "$lib/components/ui/card/index.js";
+  	import { toast } from "svelte-sonner";
 
     export let form
+
+    $: {
+      if(form?.success) {
+          let isSuccess = form?.success == true
+          let toastMessage = isSuccess ? 'The Action Executed Successfully' : 'The Action Failed to Execute'
+          if(form.message && typeof form.message === 'string') toastMessage = form.message
+          toast(isSuccess ? 'Success' : 'Failed', {
+              description: toastMessage,
+          })
+      }
+  }
 </script>
 
 <div class="flex min-h-[50dvh] flex-col items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">

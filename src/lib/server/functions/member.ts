@@ -1,4 +1,5 @@
 // import { v4 as uuid } from "uuid";
+import type { Customers, Points } from "@prisma/client";
 import db from "../utils/prisma";
 import { Argon2id } from "oslo/password";
 
@@ -311,6 +312,30 @@ export const getCustomerAllTransactionsWithPagination = async (customerId: strin
             }
         })
         return transactions
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+} 
+
+/**
+ * update member point first (current member total point + used point in transaction - gathered point from this transaction)
+ */
+export const updateMemberPointBeforeTransactionDeletedOrUpdated = async ( customer: Customers, point: Points | null, currentTotalPoint: number ) => {
+    try {
+        let newTotalPoint = customer.total_point
+        if(point != null) { newTotalPoint += point.minimum }
+        newTotalPoint -= currentTotalPoint
+        if(newTotalPoint < 0) newTotalPoint = 0
+        const data = await db.customers.update({
+            where: {
+                id: customer.id
+            },
+            data: {
+                total_point: newTotalPoint
+            }
+        })
+        return data
     } catch(err) {
         console.log(err)
         return null
