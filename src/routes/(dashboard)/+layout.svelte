@@ -20,7 +20,7 @@
 
                 </div>
 
-                <section id="content" class="w-full h-full">
+                <section id="content" class="overflow-x-hidden w-full h-full">
                     <slot />
                 </section>
 

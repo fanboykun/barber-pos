@@ -72,7 +72,7 @@
                 </DropdownMenu.Root>
             {/if}
 		</div>
-        <Sheet.Root bind:open={sidebarOpen}>
+        <!-- <Sheet.Root bind:open={sidebarOpen}>
             <Sheet.Trigger class="block md:hidden ml-4">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-slate-900">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -81,6 +81,6 @@
             <Sheet.Content  side="left" class="w-2/3 sm:w-1/3">
                 <Sidebar isMobile={true} />
             </Sheet.Content>
-        </Sheet.Root>
+        </Sheet.Root> -->
 	</div>
 </div>

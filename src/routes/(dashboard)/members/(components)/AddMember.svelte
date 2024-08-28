@@ -16,7 +16,7 @@
   
   </script>
   
-  <Dialog.Root bind:open={isOpen} onOpenChange={() => { onClose() }}>
+  <Dialog.Root bind:open={isOpen} onOpenChange={() => { onClose(); }}>
       <Dialog.Content class="sm:max-w-[425px]">
           <Dialog.Header>
             <Dialog.Title>{formAction == '?/createMember' ? 'Add' : formAction == '?/editMember' ? 'Edit' : 'Update Password'  } Member</Dialog.Title>
@@ -27,9 +27,9 @@
           <form action="{formAction}" method="post" use:enhance>
               <div class="grid gap-4 py-4">
                 {#if formAction == '?/editMember' || formAction == '?/updateMemberPassword'}
-                <input type="text" class="hidden" name="id" id="id" value={member?.id}>
+                  <input type="text" class="hidden" name="id" id="id" value={member?.id}>
                 {/if}
-                {#if formAction != '?/updateMemberPassword'}
+                {#if formAction == '?/editMember' || formAction == '?/createMember'}
                   <div class="grid grid-cols-4 items-center gap-4">
                     <Label for="name" class="text-right">Name</Label>
                   <Input id="name" name="name" value={member?.name} type="text" class="col-span-3" required />
@@ -48,7 +48,8 @@
                       {/if}
                     </div>
                   </div>
-                {:else}
+                {/if}
+                {#if formAction == '?/updateMemberPassword' || formAction == '?/createMember'}
                   <div class="grid grid-cols-4 items-center gap-4">
                     <Label for="password" class="text-right">Password</Label>
                     <Input id="password" name="password" type="password" min="0" class="col-span-3" />
