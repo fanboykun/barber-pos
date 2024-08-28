@@ -2,6 +2,7 @@
 	import Sidebar from '$lib/components/layouts/stylist/Sidebar.svelte';
 	import TopNavigation from '$lib/components/layouts/stylist/TopNavigation.svelte';
 	import Separator from '$lib/components/pages/profile/Separator.svelte';
+	import PageTransition from '$lib/components/ui/PageTransition.svelte';
 
     export let data
 </script>
@@ -21,7 +22,9 @@
         </div>
 
         <section id="content" class="overflow-x-hidden w-full h-full">
-            <slot />
+            <PageTransition pathname={data.pathname}>
+                <slot />
+            </PageTransition>
         </section>
 
     </div>
