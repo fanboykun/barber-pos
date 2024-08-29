@@ -24,7 +24,7 @@ export const getAllMembersWithPagination = async ( { search = '', skip = 0, take
             take: take,
             where: {
                 name: {
-                  contains: search,
+                  contains: `%${search}%`,
                 },
               },
             orderBy: {
@@ -38,9 +38,15 @@ export const getAllMembersWithPagination = async ( { search = '', skip = 0, take
     }
 }
 
-export const getMembersCount = async () => {
+export const getMembersCount = async (search: string = '') => {
     try {
-        const data = await db.customers.count()
+        const data = await db.customers.count({
+            where: {
+                name: {
+                    contains: `%${search}%`
+                }
+            }
+        })
         return data
     } catch (err) {
         console.log(err)

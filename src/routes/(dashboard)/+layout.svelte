@@ -8,7 +8,7 @@
     let isSidebarShow = true
 </script>
 <svelte:head>
-    <title>Dashboard Sveltekit Breeze</title>
+    <title>Dashboard</title>
 </svelte:head>
     
     <TopNavigation user={data.user} onHideShowSidebar={() => isSidebarShow = !isSidebarShow} isSidebarShow />

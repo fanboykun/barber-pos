@@ -58,3 +58,5 @@ export class Pagination
 
     }
 }
+
+export type PaginationType = Pagination["pagination"]

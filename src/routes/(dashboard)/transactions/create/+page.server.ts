@@ -6,6 +6,7 @@ import { fail, redirect, type Action, type Actions } from '@sveltejs/kit'
 import { validateAddTransaction } from '../(validation)/index.js'
 import { addTransaction, type TransactionFormDataValidated } from '$lib/server/functions/transaction.js'
 import type { Customers, Points } from '@prisma/client'
+import { Pagination } from '$lib/server/utils/pagination.js'
 
 export const load = async (event) => {
     if ( !event.locals.session || ( event.locals.user === null || event.locals.user?.role !== "ADMIN" ) ) {
@@ -27,13 +28,22 @@ export const load = async (event) => {
     }
 }
 
-const getCustomers: Action = async ({request}) => {
+const getCustomers: Action = async ({ request, url }) => {
     const f = await request.formData()
     const search = f.get('searchCustomer') as unknown as string ?? ''
-    const [allMembers, membersCount] = await Promise.all([getAllMembersWithPagination({ search: search }), getMembersCount()])
+    const page = f.get('page') as unknown as number ?? 0
+
+    const membersCount = await getMembersCount(search)
+    const paginate = new Pagination(membersCount, 10, url.pathname)
+    let currentPageFromParam = Number(page)
+    if(isNaN(currentPageFromParam) || currentPageFromParam == 0) { currentPageFromParam = 1 }
+    paginate.move(Number(currentPageFromParam))
+
+    const allMembers = await getAllMembersWithPagination({ search: search, skip: paginate.pagination.skip, take: paginate.pagination.take })
     return { 
         'allMembers': allMembers,
-        'membersCount': membersCount
+        'membersCount': membersCount,
+        'pagination': paginate.pagination
      }
 }
 

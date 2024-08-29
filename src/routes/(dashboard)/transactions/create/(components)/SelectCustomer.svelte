@@ -10,6 +10,7 @@
 	import { enhance } from "$app/forms";
 	import type { SubmitFunction } from "@sveltejs/kit";
 	import ScanQr from "./ScanQr.svelte";
+	import type { Pagination, PaginationType } from "$lib/server/utils/pagination";
 
     export let setCustomer: Function
     export let customer: Customers | undefined = undefined
@@ -20,28 +21,13 @@
     let isSearchCustomerDialogOpen = false
     let isScanCustomerDialogOpen = false
 
+    let paginationObj: PaginationType|undefined
+    let hasSearchCustomer = false
+    let searchCustomerInput: string = ''
+
     if(customer) {
         selectedCustomer = customer
         setCustomer(selectedCustomer)
-    }
-
-    const getCustomers: SubmitFunction = ({ formData }) => {
-        return async ({ result }) => {
-            if(result.type != "success") return
-            isSearchCustomerDialogOpen = true
-            if(result.data == undefined) return
-            customers = result.data.allMembers as Customers[]
-            customersCount = result.data.membersCount
-        }
-    }
-
-    const getCustomersViaSearch: SubmitFunction = ({ formData }) => {
-        return async ({ result }) => {
-            if(result.type != "success") return
-            isSearchCustomerDialogOpen = true
-            if(result.data == undefined) return
-            customers = result.data.allMembers as Customers[]
-        }
     }
 
     function receiveCustomerAfterScan(customer: Customers|undefined = undefined) {
@@ -49,6 +35,33 @@
         if(!customer) return
         setCustomer(customer);
         selectedCustomer = customer;
+    }
+
+    const getCustomers: SubmitFunction = ( { formData, submitter } ) => {
+        submitter?.setAttribute('disabled', 'true')
+        let page = 0 // initial page/current
+        const direction = formData.get('direction')
+        if(paginationObj && direction) {
+            if(direction == "next" && paginationObj.canGoNext) page = paginationObj.currentPage + 1
+            else if(direction == 'prev' && paginationObj.canGoPrev) page = paginationObj.currentPage - 1
+        }
+        formData.append('page', String(page))
+        const s = formData.get('searchCustomer')
+        if(s) searchCustomerInput = String(s)
+        return async ({ result }) => {
+            submitter?.removeAttribute('disabled')
+            if(submitter?.id == 'searchCustomerBtn') { hasSearchCustomer = true }
+            if(submitter?.id == 'resetSearchBtn') { 
+                hasSearchCustomer = false
+                searchCustomerInput = ''
+             }
+            if(result.type != "success") return
+            isSearchCustomerDialogOpen = true
+            if(result.data == undefined) return
+            customers = result.data.allMembers as Customers[]
+            customersCount = result.data.membersCount
+            paginationObj = result.data.pagination
+        }
     }
 
 
@@ -78,13 +91,6 @@
                             </svg>                                  
                             {selectedCustomer.total_point} Point
                             </p>
-                            <!-- <p class="flex gap-x-1 text-sm leading-tight font-semibold text-gray-500">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
-                                <path d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625Z" />
-                                <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
-                            </svg>                                  
-                            0 Transactions
-                            </p> -->
                         </div>
                     </div>
                 </div>
@@ -138,14 +144,17 @@
           Search customer by name or phone then select it to create transaction
         </Dialog.Description>
       </Dialog.Header>
-      <form action="?/getCustomers" method="POST" use:enhance={getCustomersViaSearch} class="flex gap-x-2">
-          <Input name="searchCustomer" type="search" placeholder="search customer by name or phone" />
-        <Button class="flex gap-x-1" type="submit">
+      <form action="?/getCustomers" method="POST" use:enhance={getCustomers} class="flex gap-x-2">
+        <Input name="searchCustomer" value={searchCustomerInput} type="search" placeholder="search customer by name or phone" />
+        <Button class="flex gap-x-1" type="submit" id="searchCustomerBtn">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
               </svg>
         </Button>
       </form>
+      {#if hasSearchCustomer}
+      <p class="w-full text-sm text-center py-0.5 text-gray-500">search result from <span class="font-bold">'{searchCustomerInput}'</span> </p>
+      {/if}
       <Table.Root>
         {#if !customers}
         <Table.Caption>list of customers</Table.Caption>
@@ -175,21 +184,29 @@
             <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200 dark:border-neutral-700">
               <div>
                 <p class="text-sm text-gray-600 dark:text-neutral-400">
-                  <span class="font-semibold text-gray-800 dark:text-neutral-200">{customersCount}</span> results
+                {#if paginationObj}
+                  <span class="font-semibold text-gray-800 dark:text-neutral-200">{paginationObj.showing.of}</span> results
+                  <!-- <span class="font-semibold text-gray-800 dark:text-neutral-200">{customersCount}</span> results -->
+                {/if}
                 </p>
               </div>
-              {#if  customersCount > 10}
+              {#if paginationObj}
               <div>
                 <div class="inline-flex gap-x-2">
-                  <button type="button" class="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
-                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-                    Prev
-                  </button>
-  
-                  <button type="button" class="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
-                    Next
-                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                  </button>
+                    <form action="?/getCustomers" method="post" use:enhance={getCustomers}>
+                        <input type="hidden" name="direction" id="direction" value="prev">
+                        <button type="submit" disabled={!paginationObj.canGoPrev} class="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                          <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                          Prev
+                        </button>
+                    </form>
+                    <form action="?/getCustomers" method="post" use:enhance={getCustomers}>
+                        <input type="hidden" name="direction" id="direction" value="next">
+                        <button type="submit" disabled={!paginationObj.canGoNext} class="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                          Next
+                          <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                        </button>
+                    </form>
                 </div>
               </div>
               {/if}
@@ -197,7 +214,13 @@
             </div>
         <!-- End Footer -->
       <Dialog.Footer>
-        <Button type="button" variant="secondary" on:click={() =>  isSearchCustomerDialogOpen = false}> Close </Button>
+        <div class="flex w-full justify-between">
+            <form action="?/getCustomers" method="post" use:enhance={getCustomers}>
+                <input type="hidden" name="searchCustomer" id="searchCustomer" value="">
+                <Button disabled={!hasSearchCustomer} id="resetSearchBtn" type="submit" variant="destructive"> Reset </Button>
+            </form>
+            <Button type="button" variant="secondary" on:click={() =>  isSearchCustomerDialogOpen = false}> Close </Button>
+        </div>
       </Dialog.Footer>
     </Dialog.Content>
 </Dialog.Root>
